@@ -89,5 +89,9 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+@app.route('/teamFormation')
+def teamFormation():
+    return render_template('teamFormation.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
