@@ -1,7 +1,7 @@
 {% extends "bootstrap/base.html" %}
 
 {% block title %}
-About Page
+Team Formation Page
 {% endblock %}
 
 {% block styles %}
@@ -20,7 +20,6 @@ About Page
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="{{ url_for('index') }}">Iron Bronco Triathlon</a>
         </div>
@@ -31,19 +30,36 @@ About Page
             <li><a href="{{ url_for('login') }}">Login</a></li>
             <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
             <li><a href="{{ url_for('teamFormation') }}">Team Formation</a></li>
-            <li><a href="{{ url_for('lookingForTeam') }}">Looking for Team</a></li>
+            <li><a href="{{ url_for('lookingForTeam') }}">Looking For Team</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
-    <div class="container">
+    <div class = "container">
+        <div class = "starter-template">
+            <h1 style="color: White">Team Formation</h1>
+        </div>
+    </div>
 
-      <div class="starter-template">
-          <h1 style="color: White">About</h1>
-        <p style="color: White" class="lead">Run 26.2 miles, Swim 2.4 miles and Bike 112 miles <br> Have Fun!</p>
-      </div>
-
-    </div><!-- /.container -->
+    <div class = "create_team">
+      <h4 style="color: White">To create a team, enter a team name in the box below and then click the "Create Team" button below</h4>
+      <form>
+        <input type = "text" name = "createdTeamName">
+      </form>
+      <br>
+      <button style="padding:10px;">Create Team</button>
+    </div>
+    <div>
+      <h4 style="color: White">To join a team, enter a team name in the box below and then click the "Join Team" button below</h4>
+      <form>
+          <input type = "text" name = "joinedTeamName">
+      </form>
+      <br>
+      <button style="padding:10px 20px;">Join team</button>
+    </div>
+    <div class>
+      <h4 style="color: White">To post your profile on the "Looking for team page" click the "Post Profile" button below</h4>
+      <button style="padding:10px;">Post Profile</button>
+    </div>
 {% endblock %}
-
