@@ -93,5 +93,9 @@ def logout():
 def teamFormation():
     return render_template('teamFormation.html')
 
+@app.route('/lookingForTeam')
+def lookingForTeam():
+    return render_template('lookingForTeam.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
