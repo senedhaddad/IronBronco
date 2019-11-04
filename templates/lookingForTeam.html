@@ -42,49 +42,17 @@ Looking for Team Page
       </div>
   </div>
 
-  <div style="width: 1000px;
-    border: 5px solid #800000;
-    padding: 5px;
-    margin: 20px;
-    background-color: white;"> 
-    <p style="text-align:left;">Name: Bucky Bronco</p>
-    <p style="text-align:left;">Email: bbronco@scu.edu</p>
-    <p style="text-align:left;">Bio: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
-                                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in 
-                                    culpa qui officia deserunt mollit anim id est laborum.</p>
-  </div>
-  <div style="width: 1000px;
-    border: 5px solid #800000;
-    padding: 5px;
-    margin: 20px;
-    background-color: white;"> 
-    <p style="text-align:left;">Name: Bucky Bronco</p>
-    <p style="text-align:left;">Email: bbronco@scu.edu</p>
-    <p style="text-align:left;">Bio: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
-                                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in 
-                                    culpa qui officia deserunt mollit anim id est laborum.</p>
-  </div>
-  <div style="width: 1000px;
-    border: 5px solid #800000;
-    padding: 5px;
-    margin: 20px;
-    background-color: white;"> 
-    <p style="text-align:left;">Name: Bucky Bronco</p>
-    <p style="text-align:left;">Email: bbronco@scu.edu</p>
-    <p style="text-align:left;">Bio: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
-                                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in 
-                                    culpa qui officia deserunt mollit anim id est laborum.</p>
-  </div>
-
-
-
+  {% for user in users %}
+    {% if user.lft %}
+      <div style="width: 1000px;
+        border: 5px solid #800000;
+        padding: 5px;
+        margin: 20px;
+        background-color: white;"> 
+        <p style="text-align:left;">Name: {{user.name}}</p>
+        <p style="text-align:left;">Email: {{user.email}}</p>
+        <p style="text-align:left;">Bio: {{user.bio}}</p>
+      </div>
+    {% endif %}
+  {% endfor %}
 {% endblock %}
