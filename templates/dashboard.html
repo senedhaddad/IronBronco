@@ -6,212 +6,104 @@ Dashboard
 
 {% block styles %}
 {{super()}}
+<link rel="icon" href="{{ url_for('.static', filename='favicon.ico')}}" type="image/x-icon">
 <link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
 {% endblock %}
 
 {% block content %}
     <nav style="background-color:#800000" class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
+      <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+
+
           </button>
-          <a class="navbar-brand" href="#">Iron Bronco Triathlon</a>
+          <a class="navbar-brand" href=""{{ url_for('index') }}"">Iron Bronco Triathlon</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+            <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('teamFormation') }}">Team Formation</a></li>
             <li><a href="{{ url_for('logout') }}">Log Out</a></li>
           </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form>
         </div>
       </div>
     </nav>
-
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-          </ul>
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Welcome, {{ name }}</h1>
+        <div>
+          <h1 class="page-header" style="text-align:center; color: White">Welcome, Insert Name</h1>
+          <!-- Show Progress -->
+          <h4 style="color:White;">Total Progress</h4>
+          <h5 style="color:White;">Swimming: X miles</h5>
+          <div class="meter"> 
+            <div class="progress"></div> 
+          </div>           
+          <h5 style="color:White;">Cycling: X miles</h5>
+          <h5 style="color:White;">Running: X miles</h5>
+          <!-- Update Progress -->
+          <div class="Progress_Status">
+            <div class="myprogressBar" ></div>
+            <h4 style="color: White">Update Progress</h4>
+            <form method="POST">
+              <div class="form-row">
+                <label for="swimming" style="color: White">Swimming</label>
+                <input class="form-control" type="number" placeholder="Input Miles Swam (miles)" id="swimming" name="swimming">
+              </div>
+              <br>
+              <div class="form-row">
+                <label for="cycling" style="color: White">Cycling</label>
+                <input class="form-control" type="number" placeholder="Input Miles Cycled (miles)" id="cycling" name="cycling">
+              </div>
+              <br>
+              <div class="form-row">
+                <label for="running" style="color: White">Running</label>
+                <input class="form-control" type="number" placeholder="Input Miles Run (miles)" id="running" name="running">
+              </div>
+              <br>
+              <button type="submit" class="btn btn-lg btn-primary btn-block" style="float:right; background-color: #800000">Update Distances</button>
+            </form>
+            <br>
+            <br>
+            <br>
+            <h4 style="color: White">Distance Biked</h4>
+            <div id='meter'><div id='progress'>0%</div></div>
+            <br>
+            <p style="color: White">Completed Distance (miles)</p>
+            <input type="text" id="tb">
+            <br>
+            <p style="color: White">Input Distance:</p>
+            <input type="button" value="Add" onclick="increase()"/>
+            <input type="button" value="Minus" onclick="decrease()"/>
 
-          <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-          </div>
 
-          <h2 class="sub-header">Section title</h2>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1,001</td>
-                  <td>Lorem</td>
-                  <td>ipsum</td>
-                  <td>dolor</td>
-                  <td>sit</td>
-                </tr>
-                <tr>
-                  <td>1,002</td>
-                  <td>amet</td>
-                  <td>consectetur</td>
-                  <td>adipiscing</td>
-                  <td>elit</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>Integer</td>
-                  <td>nec</td>
-                  <td>odio</td>
-                  <td>Praesent</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>libero</td>
-                  <td>Sed</td>
-                  <td>cursus</td>
-                  <td>ante</td>
-                </tr>
-                <tr>
-                  <td>1,004</td>
-                  <td>dapibus</td>
-                  <td>diam</td>
-                  <td>Sed</td>
-                  <td>nisi</td>
-                </tr>
-                <tr>
-                  <td>1,005</td>
-                  <td>Nulla</td>
-                  <td>quis</td>
-                  <td>sem</td>
-                  <td>at</td>
-                </tr>
-                <tr>
-                  <td>1,006</td>
-                  <td>nibh</td>
-                  <td>elementum</td>
-                  <td>imperdiet</td>
-                  <td>Duis</td>
-                </tr>
-                <tr>
-                  <td>1,007</td>
-                  <td>sagittis</td>
-                  <td>ipsum</td>
-                  <td>Praesent</td>
-                  <td>mauris</td>
-                </tr>
-                <tr>
-                  <td>1,008</td>
-                  <td>Fusce</td>
-                  <td>nec</td>
-                  <td>tellus</td>
-                  <td>sed</td>
-                </tr>
-                <tr>
-                  <td>1,009</td>
-                  <td>augue</td>
-                  <td>semper</td>
-                  <td>porta</td>
-                  <td>Mauris</td>
-                </tr>
-                <tr>
-                  <td>1,010</td>
-                  <td>massa</td>
-                  <td>Vestibulum</td>
-                  <td>lacinia</td>
-                  <td>arcu</td>
-                </tr>
-                <tr>
-                  <td>1,011</td>
-                  <td>eget</td>
-                  <td>nulla</td>
-                  <td>Class</td>
-                  <td>aptent</td>
-                </tr>
-                <tr>
-                  <td>1,012</td>
-                  <td>taciti</td>
-                  <td>sociosqu</td>
-                  <td>ad</td>
-                  <td>litora</td>
-                </tr>
-                <tr>
-                  <td>1,013</td>
-                  <td>torquent</td>
-                  <td>per</td>
-                  <td>conubia</td>
-                  <td>nostra</td>
-                </tr>
-                <tr>
-                  <td>1,014</td>
-                  <td>per</td>
-                  <td>inceptos</td>
-                  <td>himenaeos</td>
-                  <td>Curabitur</td>
-                </tr>
-                <tr>
-                  <td>1,015</td>
-                  <td>sodales</td>
-                  <td>ligula</td>
-                  <td>in</td>
-                  <td>libero</td>
-                </tr>
-              </tbody>
-            </table>
+            <script>
+              var value = 0, 
+              tb = document.getElementById("tb"),
+              progress = document.getElementById("progress"); //store these, it's better
+              function increase(){ 
+                value++;// same as value += 1, but better
+                if(value>=112) value = 112;//keep it under 100%
+                tb.value = value;// set the value of the text field     
+                progress.style.width = Math.round(value/112*100) + "%";// set the width of the progress bar 
+                progress.innerHTML = Math.round(value/112*100 * 1)  + '%'; 
+              } 
+              function decrease(){ 
+                value--;
+                if(value<=0) value = 0;//keep it over 0%
+                tb.value = value; 
+                progress.style.width = Math.round(value/112*100) + "%";
+                progress.innerHTML = Math.round(value/112*100) * 1  + '%'; 
+              } 
+              </script>
           </div>
+          <br>
         </div>
-      </div>
-    </div>
 {% endblock %}
