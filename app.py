@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request, session
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm 
 from wtforms import StringField, PasswordField, BooleanField
@@ -6,11 +6,12 @@ from wtforms.validators import InputRequired, Email, Length
 from flask_sqlalchemy  import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from decimal import Decimal
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://senedhaddad:PostgresDB1!@localhost/test_coen'
-#Change to location of databae.db
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/peterferguson'
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
@@ -20,7 +21,7 @@ login_manager.login_view = 'login'
 
 class Users(UserMixin, db.Model):
     name = db.Column(db.String(30))
-    email = db.Column(db.String(40), primary_key=True)
+    email = db.Column(db.String(40), unique=True)
     password = db.Column(db.String(80))
     teamid = db.Column(db.String(20))
     bio = db.Column(db.String(200))
@@ -30,8 +31,8 @@ class Users(UserMixin, db.Model):
     id = db.Column(db.Integer(), primary_key=True)
 
 class Team(UserMixin, db.Model):
-    # id = db.Column(db.Integer)
-    team = db.Column(db.String(20), primary_key=True)
+    id = db.Column(db.Integer,primary_key=True)
+    team = db.Column(db.String(20), unique=True)
     player1 = db.Column(db.String(30))
     player2 = db.Column(db.String(30))
     player3 = db.Column(db.String(30))
@@ -44,7 +45,7 @@ def load_user(user_id):
     return Users.query.get(int(user_id))
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[InputRequired(), Length(min=5, max=40)])
+    name = StringField('name', validators=[InputRequired(), Length(min=4, max=15)])
     password = PasswordField('Password', validators=[InputRequired(), Length(min=8, max=80)])
     remember = BooleanField('Remember me')
 
@@ -85,20 +86,56 @@ def signup():
 
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data, method='sha256')
-        new_user = Users(email=form.email.data, name=form.name.data, password=hashed_password, bio=form.bio.data)
+        new_user = Users(name=form.name.data, 
+                        email=form.email.data, 
+                        password=hashed_password,
+                        teamid="Test",
+                        bio=form.bio.data,
+                        swimming=0.0,
+                        cycling=0.0,
+                        running = 0.0)
         db.session.add(new_user)
         db.session.commit()
 
-        return redirect(url_for('dashboard'))
-        #return '<h1>New user has been created!</h1>'
-        #return '<h1>' + form.email.data + ' ' + form.name.data + ' ' + form.password.data + '</h1>'
+        return redirect(url_for('index'))
 
     return render_template('signup.html', form=form)
 
 @app.route('/dashboard')
 @login_required
-def dashboard():
-    return render_template('dashboard.html', name=current_user.name)
+id = session["user_id"]
+    player = db.session.query(Users).get(id)
+    # team = db.session.query(Team).get(player.teamid)     
+    if request.method == 'POST':
+        cycling=request.form['cycling']
+        running=request.form['running']
+        swimming=request.form['swimming']
+        if not swimming:
+            swimming=0.0
+        if not cycling:
+            cycling=0.0
+        if not running:
+            running=0.0
+        try:
+            player.cycling+=Decimal(cycling)
+            if player.cycling >= 112:
+                player.cycling = 112
+            player.running+=Decimal(running)
+            if player.running >= 26.2:
+                player.running = 26.2
+            player.swimming+=Decimal(swimming)
+            if player.swimming >= 2.4:
+                player.swimming = 2.4
+            # team.cycling+=cycling
+            # team.running+=running
+            # team.swimming+=swimming
+            db.session.commit()
+        except Exception as e:
+            return(str(e))
+
+    # return render_template('dashboard.html')
+    return render_template('dashboard.html',player=player)
+    # return render_template('dashboard.html',player=player,team=team)
 
 @app.route('/logout')
 @login_required

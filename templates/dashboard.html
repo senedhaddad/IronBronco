@@ -41,13 +41,13 @@ Dashboard
         <div>
           <h1 class="page-header" style="text-align:center; color: White">Welcome, Insert Name</h1>
           <!-- Show Progress -->
-          <h4 style="color:White;">Total Progress</h4>
-          <h5 style="color:White;">Swimming: X miles</h5>
+          <h4 style="color:White;">Total Progress {{player.teamid}}</h4>
+          <h5 style="color:White;">Swimming: {{"%.1f"|format(player.swimming)}} miles</h5>
           <div class="meter"> 
             <div class="progress"></div> 
           </div>           
-          <h5 style="color:White;">Cycling: X miles</h5>
-          <h5 style="color:White;">Running: X miles</h5>
+          <h5 style="color:White;">Cycling: {{"%.1f"|format(player.cycling)}} miles</h5>
+          <h5 style="color:White;">Running: {{"%.1f"|format(player.running)}} miles</h5>
           <!-- Update Progress -->
           <div class="Progress_Status">
             <div class="myprogressBar" ></div>
@@ -55,17 +55,17 @@ Dashboard
             <form method="POST">
               <div class="form-row">
                 <label for="swimming" style="color: White">Swimming</label>
-                <input class="form-control" type="number" placeholder="Input Miles Swam (miles)" id="swimming" name="swimming">
+                <input class="form-control" min="0.0" max="2.4" type="number" placeholder="Input Miles Swam (miles)" id="swimming" name="swimming">
               </div>
               <br>
               <div class="form-row">
                 <label for="cycling" style="color: White">Cycling</label>
-                <input class="form-control" type="number" placeholder="Input Miles Cycled (miles)" id="cycling" name="cycling">
+                <input class="form-control" min="0.0" max="112.0" type="number" placeholder="Input Miles Cycled (miles)" id="cycling" name="cycling">
               </div>
               <br>
               <div class="form-row">
                 <label for="running" style="color: White">Running</label>
-                <input class="form-control" type="number" placeholder="Input Miles Run (miles)" id="running" name="running">
+                <input class="form-control" min="0.0" max="26.2" type="number" placeholder="Input Miles Run (miles)" id="running" name="running">
               </div>
               <br>
               <button type="submit" class="btn btn-lg btn-primary btn-block" style="float:right; background-color: #800000">Update Distances</button>
@@ -73,7 +73,7 @@ Dashboard
             <br>
             <br>
             <br>
-            <h4 style="color: White">Distance Biked</h4>
+            <!-- <h4 style="color: White">Distance Biked</h4>
             <div id='meter'><div id='progress'>0%</div></div>
             <br>
             <p style="color: White">Completed Distance (miles)</p>
@@ -81,10 +81,10 @@ Dashboard
             <br>
             <p style="color: White">Input Distance:</p>
             <input type="button" value="Add" onclick="increase()"/>
-            <input type="button" value="Minus" onclick="decrease()"/>
+            <input type="button" value="Minus" onclick="decrease()"/> -->
 
 
-            <script>
+            <!-- <script>
               var value = 0, 
               tb = document.getElementById("tb"),
               progress = document.getElementById("progress"); //store these, it's better
@@ -102,7 +102,7 @@ Dashboard
                 progress.style.width = Math.round(value/112*100) + "%";
                 progress.innerHTML = Math.round(value/112*100) * 1  + '%'; 
               } 
-              </script>
+              </script> -->
           </div>
           <br>
         </div>
