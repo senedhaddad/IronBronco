@@ -14,6 +14,6 @@ python manage.py db migrate \
 python manage.py db upgrade \
 \
 #To run program \
-python3 app.py db init \
+python3 app.py \
 \
 https://medium.com/@dushan14/create-a-web-application-with-python-flask-postgresql-and-deploy-on-heroku-243d548335cc
