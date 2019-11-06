@@ -11,8 +11,8 @@ import sqlite3
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/peterferguson'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/peterferguson'
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
@@ -93,13 +93,14 @@ def signup():
 
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data, method='sha256')
-        new_user = Team(team="shit",
-                player1="null",
-                player2="null",
-                player3="null",
-                swimming=0.0,
-                cycling=0.0,
-                running=0.0)
+        new_user = Users(name=form.name.data, 
+                        email=form.email.data, 
+                        password=hashed_password,
+                        teamid="Test",
+                        bio="Hello this is my bio",
+                        swimming=0.0,
+                        cycling=0.0,
+                        running = 0.0)
         db.session.add(new_user)
         db.session.commit()
 
