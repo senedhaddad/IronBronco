@@ -41,14 +41,16 @@ Looking for Team Page
   </div>
 
   {% for user in users %}
-    <div style="width: 1000px;
+    {% if user.lft %}
+      <div style="width: 1000px;
         border: 5px solid #800000;
         padding: 5px;
         margin: 20px;
         background-color: white;"> 
-      <p style="text-align:left; color: black">Name: {{user.name}}</p>
-      <p style="text-align:left; color: black">Email: {{user.email}}</p>
-      <p style="text-align:left; color: black">Bio: {{user.bio}}</p>
-    </div>
+        <p style="text-align:left; color: black">Name: {{user.name}}</p>
+        <p style="text-align:left; color: black">Email: {{user.email}}</p>
+        <p style="text-align:left; color: black">Bio: {{user.bio}}</p>
+      </div>
+    {% endif %}
   {% endfor %}
 {% endblock %}

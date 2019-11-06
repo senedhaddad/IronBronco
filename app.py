@@ -47,7 +47,7 @@ def load_user(user_id):
     return Users.query.get(int(user_id))
 
 class LoginForm(FlaskForm):
-    name = StringField('name', validators=[InputRequired(), Length(min=4, max=15)])
+    email = StringField('Email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=40)])
     password = PasswordField('Password', validators=[InputRequired(), Length(min=8, max=80)])
     remember = BooleanField('Remember me')
 
@@ -57,8 +57,11 @@ class RegisterForm(FlaskForm):
     password = PasswordField('Password', validators=[InputRequired(), Length(min=8, max=80)])
     bio = StringField('Bio', validators=[InputRequired(), Length(min=1, max=200)])
 
-class TeamForm(FlaskForm):
-    teamid = StringField('name', validators=[InputRequired(), Length(min=2, max=30)])
+class CreateTeamForm(FlaskForm):
+    teamid = StringField('Create Team', validators=[InputRequired(), Length(min=2, max=30)])
+
+class JoinTeamForm(FlaskForm):
+    teamid = StringField('Join Team', validators=[InputRequired(), Length(min=2, max=30)])
 
 @app.route('/')
 def index():
@@ -106,7 +109,7 @@ def signup():
 
     return render_template('signup.html', form=form)
 
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     id = session["user_id"]
@@ -149,42 +152,24 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/teamFormation')
+@app.route('/teamFormation', methods=['GET','POST'])
 @login_required
 def teamFormation():
     id = session["user_id"]
     player = db.session.query(Users).get(id)
-    formCT = TeamForm()
-    formJT = TeamForm()
+    formCT = CreateTeamForm()
 
     if formCT.validate_on_submit():
         new_team=Team(team=form.teamid.data,
-                      player1=player,
-                      player2="null",
-                      player3="null",
-                      swimming=0.0,
-                      cycling=0.0,
-                      running=0.0)
+                player1=player,
+                player2="null",
+                player3="null",
+                swimming=0.0,
+                cycling=0.0,
+                running=0.0)
         player.lft=False
     
-    if formJT.validate_on_submit():
-        currentTeam = Team.query.filter_by(team=formJT.teamid.data).first()
-        if currentTeam:
-            try:
-                if currentTeam.player2 == "null":
-                    currentTeam.player2 = player
-                    player.lft=False
-                elif currentTeam.player3 == "null":
-                    currentTeam.player3 = player
-                    player.lft=False
-                else:
-                    return("Sorry, the team you are trying to join is full")
-            except Exception as e:
-                return(str(e))
-        else:
-            return("Sorry, the team you are trying to join does not exist")
-    
-    return render_template('teamFormation.html',formCT=formCT,formJT=formJT)
+    return render_template('teamFormation.html',formCT=formCT)
 
 @app.route('/lookingForTeam')
 def lookingForTeam():

@@ -41,22 +41,18 @@ Team Formation Page
         </div>
     </div>
 
-    <div class = "create_team">
-      <h4 style="color: White">To create a team, enter a team name in the box below and then click the "Create Team" button</h4>
-      <form method="POST">
-        {{ wtf.form_field(formCT.teamid) }}
-        <button style="padding:10px;" type="submit">Create Team</button>
-      </form>
-    </div>
     <div>
-      <h4 style="color: White">To join a team, enter a team name in the box below and then click the "Join Team" button</h4>
-      <form method="POST">
-        {{ wtf.form_field(formJT.teamid) }}
-        <button style="padding:10px 20px;" type="submit">Join team</button>
+      <!--<h4 style="color: White">To create a team, enter a team name in the box below and then click the "Create Team" button</h4>-->
+      <form style="color: White; margin-right: 500px; margin-left: 500px;" method="POST">
+        {{ wtf.form_field(formCT.teamid) }}
+        <button style="padding:10px; color: #800000;" type="submit" value="create" name="btn">Create Team</button>
       </form>
     </div>
-    <div class>
+    <br>
+    
+    <br>
+    <div>
       <h4 style="color: White">To post your profile on the "Looking for team page" click the "Post Profile" button below</h4>
-      <button style="padding:10px;">Post Profile</button>
+      <button style="padding:10px;" value="postOnLft" name="btn">Post Profile</button>
     </div>
 {% endblock %}
