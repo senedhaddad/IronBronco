@@ -11,8 +11,8 @@ import sqlite3
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/peterferguson'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/senedhaddad'
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
@@ -97,8 +97,9 @@ def signup():
             new_user = Users(name=form.name.data, 
                             email=form.email.data, 
                             password=hashed_password,
-                            teamid="Test",
-                            bio="Hello this is my bio",
+                            teamid=0,
+                            bio=form.bio.data,
+                            lft = True,
                             swimming=0.0,
                             cycling=0.0,
                             running = 0.0)
@@ -191,6 +192,41 @@ def teamFormation():
         return redirect(url_for('badTeamName'))
         
     return render_template('teamFormation.html',formCT=formCT)
+
+@app.route('/joinTeam', methods=['GET','POST'])
+@login_required
+def joinTeam():
+    id = session["user_id"]
+    player = db.session.query(Users).get(id)
+    formJT = JoinTeamForm()
+
+    # Currently takes teamid as input to join team
+    if formJT.validate_on_submit():
+        currentTeam = db.session.query(Team).get(formJT.teamid.data)
+        if currentTeam:
+            try:
+                if currentTeam.player2 == "null":
+                    currentTeam.player2 = player.name
+                    player.teamid = currentTeam.id
+                    print(currentTeam.id, player.name)
+                    player.lft=False
+                    db.session.commit()
+                    return redirect(url_for('dashboard'))
+                elif currentTeam.player3 == "null":
+                    currentTeam.player3 = player.name
+                    player.teamid = currentTeam.id
+                    print(currentTeam.id, player.name)
+                    player.lft=False
+                    db.session.commit()
+                    return redirect(url_for('dashboard'))
+                else:
+                    return("Sorry, the team you are trying to join is full")
+            except Exception as e:
+                return(str(e))
+        else:
+            return("Sorry, the team you are trying to join does not exist")
+
+    return render_template('joinTeam.html',formJT=formJT)
 
 @app.route('/lookingForTeam')
 def lookingForTeam():
