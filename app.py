@@ -7,10 +7,11 @@ from flask_sqlalchemy  import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from decimal import Decimal
+import sqlite3
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://senedhaddad:PostgresDB1!@localhost/test_coen'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/peterferguson'
 
 bootstrap = Bootstrap(app)
@@ -25,6 +26,7 @@ class Users(UserMixin, db.Model):
     password = db.Column(db.String(80))
     teamid = db.Column(db.String(20))
     bio = db.Column(db.String(200))
+    lft = db.Column(db.Boolean(False))
     swimming = db.Column(db.Float(3, 2))
     cycling = db.Column(db.Float(5, 2))
     running = db.Column(db.Float(4,2))
@@ -55,6 +57,8 @@ class RegisterForm(FlaskForm):
     password = PasswordField('Password', validators=[InputRequired(), Length(min=8, max=80)])
     bio = StringField('Bio', validators=[InputRequired(), Length(min=1, max=200)])
 
+class TeamForm(FlaskForm):
+    teamid = StringField('name', validators=[InputRequired(), Length(min=2, max=30)])
 
 @app.route('/')
 def index():
@@ -91,6 +95,7 @@ def signup():
                         password=hashed_password,
                         teamid="Test",
                         bio=form.bio.data,
+                        lft=False,
                         swimming=0.0,
                         cycling=0.0,
                         running = 0.0)
@@ -103,7 +108,8 @@ def signup():
 
 @app.route('/dashboard')
 @login_required
-id = session["user_id"]
+def dashboard():
+    id = session["user_id"]
     player = db.session.query(Users).get(id)
     # team = db.session.query(Team).get(player.teamid)     
     if request.method == 'POST':
@@ -144,12 +150,46 @@ def logout():
     return redirect(url_for('index'))
 
 @app.route('/teamFormation')
+@login_required
 def teamFormation():
-    return render_template('teamFormation.html')
+    id = session["user_id"]
+    player = db.session.query(Users).get(id)
+    formCT = TeamForm()
+    formJT = TeamForm()
+
+    if formCT.validate_on_submit():
+        new_team=Team(team=form.teamid.data,
+                      player1=player,
+                      player2="null",
+                      player3="null",
+                      swimming=0.0,
+                      cycling=0.0,
+                      running=0.0)
+        player.lft=False
+    
+    if formJT.validate_on_submit():
+        currentTeam = Team.query.filter_by(team=formJT.teamid.data).first()
+        if currentTeam:
+            try:
+                if currentTeam.player2 == "null":
+                    currentTeam.player2 = player
+                    player.lft=False
+                elif currentTeam.player3 == "null":
+                    currentTeam.player3 = player
+                    player.lft=False
+                else:
+                    return("Sorry, the team you are trying to join is full")
+            except Exception as e:
+                return(str(e))
+        else:
+            return("Sorry, the team you are trying to join does not exist")
+    
+    return render_template('teamFormation.html',formCT=formCT,formJT=formJT)
 
 @app.route('/lookingForTeam')
 def lookingForTeam():
-    return render_template('lookingForTeam.html')
+    users = Users.query.all()
+    return render_template('lookingForTeam.html',users=users)
 
 if __name__ == '__main__':
     app.run(debug=True)

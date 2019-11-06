@@ -1,4 +1,5 @@
 {% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}
 Team Formation Page
@@ -41,20 +42,18 @@ Team Formation Page
     </div>
 
     <div class = "create_team">
-      <h4 style="color: White">To create a team, enter a team name in the box below and then click the "Create Team" button below</h4>
-      <form>
-        <input type = "text" name = "createdTeamName">
+      <h4 style="color: White">To create a team, enter a team name in the box below and then click the "Create Team" button</h4>
+      <form method="POST">
+        {{ wtf.form_field(formCT.teamid) }}
+        <button style="padding:10px;" type="submit">Create Team</button>
       </form>
-      <br>
-      <button style="padding:10px;">Create Team</button>
     </div>
     <div>
-      <h4 style="color: White">To join a team, enter a team name in the box below and then click the "Join Team" button below</h4>
-      <form>
-          <input type = "text" name = "joinedTeamName">
+      <h4 style="color: White">To join a team, enter a team name in the box below and then click the "Join Team" button</h4>
+      <form method="POST">
+        {{ wtf.form_field(formJT.teamid) }}
+        <button style="padding:10px 20px;" type="submit">Join team</button>
       </form>
-      <br>
-      <button style="padding:10px 20px;">Join team</button>
     </div>
     <div class>
       <h4 style="color: White">To post your profile on the "Looking for team page" click the "Post Profile" button below</h4>
