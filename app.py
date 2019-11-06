@@ -157,7 +157,8 @@ def teamFormation():
     player = db.session.query(Users).get(id)
     formCT = CreateTeamForm()
 
-    try:
+    
+    if formCT.validate_on_submit():
         new_team = Team(team=formCT.teamid.data,
                 player1="player",
                 player2="null",
@@ -168,9 +169,6 @@ def teamFormation():
         player.lft=False
         db.session.add(new_team)
         db.session.commit()
-    except Exception as e:
-        flash("Team name already in use")
-        return redirect(url_for('index'))
         
 
     
