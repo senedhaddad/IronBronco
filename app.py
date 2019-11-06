@@ -24,7 +24,7 @@ class Users(UserMixin, db.Model):
     name = db.Column(db.String(30))
     email = db.Column(db.String(40), unique=True)
     password = db.Column(db.String(80))
-    teamid = db.Column(db.String(20))
+    teamid = db.Column(db.Integer())
     bio = db.Column(db.String(200))
     lft = db.Column(db.Boolean(False))
     swimming = db.Column(db.Float(3, 2))
@@ -44,7 +44,7 @@ class Team(UserMixin, db.Model):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Users.query.get(int(user_id))
+    return Users.query.get(user_id)
 
 class LoginForm(FlaskForm):
     name = StringField('name', validators=[InputRequired(), Length(min=4, max=15)])
@@ -106,7 +106,7 @@ def signup():
 
     return render_template('signup.html', form=form)
 
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     id = session["user_id"]
