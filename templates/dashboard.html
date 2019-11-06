@@ -20,18 +20,16 @@ Dashboard
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
 
 
           </button>
-          <a class="navbar-brand" href=""{{ url_for('index') }}"">Iron Bronco Triathlon</a>
+          <a class="navbar-brand" href="{{ url_for('dashboard') }}">Iron Bronco Triathlon</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="{{ url_for('index') }}">Home</a></li>
-            <li><a href="{{ url_for('about') }}">About</a></li>
             <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
             <li><a href="{{ url_for('teamFormation') }}">Team Formation</a></li>
+            <li><a href="{{ url_for('lookingForTeam') }}">Looking for Team</a></li>
             <li><a href="{{ url_for('logout') }}">Log Out</a></li>
           </ul>
         </div>
@@ -39,13 +37,10 @@ Dashboard
     </nav>
         </div>
         <div>
-          <h1 class="page-header" style="text-align:center; color: White">Welcome, Insert Name</h1>
+          <h1 class="page-header" style="text-align:center; color: White">Welcome, {{player.name}}</h1>
           <!-- Show Progress -->
           <h4 style="color:White;">Total Progress {{player.teamid}}</h4>
-          <h5 style="color:White;">Swimming: {{"%.1f"|format(player.swimming)}} miles</h5>
-          <div class="meter"> 
-            <div class="progress"></div> 
-          </div>           
+          <h5 style="color:White;">Swimming: {{"%.1f"|format(player.swimming)}} miles</h5>       
           <h5 style="color:White;">Cycling: {{"%.1f"|format(player.cycling)}} miles</h5>
           <h5 style="color:White;">Running: {{"%.1f"|format(player.running)}} miles</h5>
           <!-- Update Progress -->
@@ -55,17 +50,17 @@ Dashboard
             <form method="POST">
               <div class="form-row">
                 <label for="swimming" style="color: White">Swimming</label>
-                <input class="form-control" min="0.0" max="2.4" type="number" placeholder="Input Miles Swam (miles)" id="swimming" name="swimming">
+                <input class="form-control" min="0.0" max="2.4" step="0.1" type="number" placeholder="Input Miles Swam (miles)" id="swimming" name="swimming">
               </div>
               <br>
               <div class="form-row">
                 <label for="cycling" style="color: White">Cycling</label>
-                <input class="form-control" min="0.0" max="112.0" type="number" placeholder="Input Miles Cycled (miles)" id="cycling" name="cycling">
+                <input class="form-control" min="0.0" max="112.0" step="0.1" type="number" placeholder="Input Miles Cycled (miles)" id="cycling" name="cycling">
               </div>
               <br>
               <div class="form-row">
                 <label for="running" style="color: White">Running</label>
-                <input class="form-control" min="0.0" max="26.2" type="number" placeholder="Input Miles Run (miles)" id="running" name="running">
+                <input class="form-control" min="0.0" max="26.2" step="0.1" type="number" placeholder="Input Miles Run (miles)" id="running" name="running">
               </div>
               <br>
               <button type="submit" class="btn btn-lg btn-primary btn-block" style="float:right; background-color: #800000">Update Distances</button>
