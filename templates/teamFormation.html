@@ -7,6 +7,7 @@ Team Formation Page
 
 {% block styles %}
 {{super()}}
+<link rel="icon" href="{{ url_for('.static', filename='favicon.ico')}}" type="image/x-icon">
 <link rel="stylesheet" href="{{url_for('.static', filename='starter-template.css')}}">
 {% endblock %}
 
@@ -20,16 +21,19 @@ Team Formation Page
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="{{ url_for('index') }}">Iron Bronco Triathlon</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav navbar-right">
             <li><a href="{{ url_for('index') }}">Home</a></li>
             <li><a href="{{ url_for('about') }}">About</a></li>
+            <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
             <li><a href="{{ url_for('teamFormation') }}">Team Formation</a></li>
-            <li><a href="{{ url_for('lookingForTeam') }}">Looking For Team</a></li>
-            <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+            <li><a href="{{ url_for('lookingForTeam') }}">Looking for Team</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -41,9 +45,10 @@ Team Formation Page
         </div>
     </div>
 
-    <div>
+    <div class="Progress_Status">
+        <div class="myprogressBar" ></div>
       <!--<h4 style="color: White">To create a team, enter a team name in the box below and then click the "Create Team" button</h4>-->
-      <form style="color: White; margin-right: 500px; margin-left: 500px;" method="POST" action="/teamFormation">
+      <form style="color: White" method="POST" action="/teamFormation">
         {{ formCT.hidden_tag() }}
         {{ wtf.form_field(formCT.teamid) }}
         <button style="padding:10px; color: #800000;" type="submit" value="create" name="btn">Create Team</button>
