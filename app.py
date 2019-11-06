@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, flash
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm 
 from wtforms import StringField, PasswordField, BooleanField
@@ -93,15 +93,13 @@ def signup():
 
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data, method='sha256')
-        new_user = Users(name=form.name.data, 
-                        email=form.email.data, 
-                        password=hashed_password,
-                        teamid="Test",
-                        bio=form.bio.data,
-                        lft=False,
-                        swimming=0.0,
-                        cycling=0.0,
-                        running = 0.0)
+        new_user = Team(team="shit",
+                player1="null",
+                player2="null",
+                player3="null",
+                swimming=0.0,
+                cycling=0.0,
+                running=0.0)
         db.session.add(new_user)
         db.session.commit()
 
@@ -159,15 +157,22 @@ def teamFormation():
     player = db.session.query(Users).get(id)
     formCT = CreateTeamForm()
 
-    if formCT.validate_on_submit():
-        new_team=Team(team=form.teamid.data,
-                player1=player,
+    try:
+        new_team = Team(team=formCT.teamid.data,
+                player1="player",
                 player2="null",
                 player3="null",
                 swimming=0.0,
                 cycling=0.0,
                 running=0.0)
         player.lft=False
+        db.session.add(new_team)
+        db.session.commit()
+    except Exception as e:
+        flash("Team name already in use")
+        return redirect(url_for('index'))
+        
+
     
     return render_template('teamFormation.html',formCT=formCT)
 
