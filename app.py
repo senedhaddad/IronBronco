@@ -11,8 +11,8 @@ import sqlite3
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/peterferguson'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/peterferguson'
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
@@ -91,20 +91,22 @@ def login():
 def signup():
     form = RegisterForm()
 
-    if form.validate_on_submit():
-        hashed_password = generate_password_hash(form.password.data, method='sha256')
-        new_user = Users(name=form.name.data, 
-                        email=form.email.data, 
-                        password=hashed_password,
-                        teamid="Test",
-                        bio="Hello this is my bio",
-                        swimming=0.0,
-                        cycling=0.0,
-                        running = 0.0)
-        db.session.add(new_user)
-        db.session.commit()
-
-        return redirect(url_for('index'))
+    try: 
+        if form.validate_on_submit():
+            hashed_password = generate_password_hash(form.password.data, method='sha256')
+            new_user = Users(name=form.name.data, 
+                            email=form.email.data, 
+                            password=hashed_password,
+                            teamid="Test",
+                            bio="Hello this is my bio",
+                            swimming=0.0,
+                            cycling=0.0,
+                            running = 0.0)
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for('index'))
+    except Exception as e:
+        return redirect(url_for('badEmail'))
 
     return render_template('signup.html', form=form)
 
@@ -157,28 +159,37 @@ def teamFormation():
     id = session["user_id"]
     player = db.session.query(Users).get(id)
     formCT = CreateTeamForm()
-
     
-    if formCT.validate_on_submit():
-        new_team = Team(team=formCT.teamid.data,
-                player1="player",
-                player2="null",
-                player3="null",
-                swimming=0.0,
-                cycling=0.0,
-                running=0.0)
-        player.lft=False
-        db.session.add(new_team)
-        db.session.commit()
+    try:
+        if formCT.validate_on_submit():
+            new_team = Team(team=formCT.teamid.data,
+                    player1=player.name,
+                    player2="null",
+                    player3="null",
+                    swimming=0.0,
+                    cycling=0.0,
+                    running=0.0)
+            player.lft=False
+            db.session.add(new_team)
+            db.session.commit()
+            player.teamid=new_team.id
+    except Exception as e:
+        return redirect(url_for('badTeamName'))
         
-
-    
     return render_template('teamFormation.html',formCT=formCT)
 
 @app.route('/lookingForTeam')
 def lookingForTeam():
     users = Users.query.all()
     return render_template('lookingForTeam.html',users=users)
+
+@app.route('/badTeamName')
+def badTeamName():
+    return render_template('badTeamName.html')
+
+@app.route('/badEmail')
+def badEmail():
+    return render_template('badEmail.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
