@@ -115,7 +115,8 @@ def signup():
 def dashboard():
     id = session["user_id"]
     player = db.session.query(Users).get(id)
-    # team = db.session.query(Team).get(player.teamid)     
+    if player.teamid > 0:
+        team = db.session.query(Team).get(player.teamid)     
     if request.method == 'POST':
         cycling=request.form['cycling']
         running=request.form['running']
@@ -136,16 +137,26 @@ def dashboard():
             player.swimming+=Decimal(swimming)
             if player.swimming >= 2.4:
                 player.swimming = 2.4
-            # team.cycling+=cycling
-            # team.running+=running
-            # team.swimming+=swimming
+            
+            if player.teamid > 0:
+                team.cycling+=Decimal(cycling)
+                if team.cycling >= 112:
+                    team.cycling = 112
+                team.running+=Decimal(running)
+                if team.running >= 26.2:
+                    team.running = 26.2
+                team.swimming+=Decimal(swimming)
+                if team.swimming >= 2.4:
+                    team.swimming = 2.4
+
             db.session.commit()
         except Exception as e:
             return(str(e))
 
     # return render_template('dashboard.html')
+    if player.teamid > 0:
+        return render_template('dashboard.html',player=player,team=team)
     return render_template('dashboard.html',player=player)
-    # return render_template('dashboard.html',player=player,team=team)
 
 @app.route('/logout')
 @login_required
@@ -172,7 +183,10 @@ def teamFormation():
             player.lft=False
             db.session.add(new_team)
             db.session.commit()
+            print(new_team.id)
             player.teamid=new_team.id
+            print(player.id,player.name)
+            return redirect(url_for('dashboard'))
     except Exception as e:
         return redirect(url_for('badTeamName'))
         

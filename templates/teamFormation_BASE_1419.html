@@ -1,7 +1,8 @@
 {% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}
-Looking for Team Page
+Team Formation Page
 {% endblock %}
 
 {% block styles %}
@@ -27,7 +28,7 @@ Looking for Team Page
             <li><a href="{{ url_for('index') }}">Home</a></li>
             <li><a href="{{ url_for('about') }}">About</a></li>
             <li><a href="{{ url_for('teamFormation') }}">Team Formation</a></li>
-            <li><a href="{{ url_for('lookingForTeam') }}">Looking for Team</a></li>
+            <li><a href="{{ url_for('lookingForTeam') }}">Looking For Team</a></li>
             <li><a href="{{ url_for('logout') }}">Log Out</a></li>
           </ul>
         </div><!--/.nav-collapse -->
@@ -35,20 +36,23 @@ Looking for Team Page
     </nav>
 
     <div class = "container">
-      <div class = "starter-template">
-          <h1 style="color: White">Looking for Team</h1>
-      </div>
-  </div>
-
-  {% for user in users %}
-    <div style="width: 1000px;
-        border: 5px solid #800000;
-        padding: 5px;
-        margin: 20px;
-        background-color: white;"> 
-        <p style="text-align:left; color: black">Name: {{user.name}}</p>
-      <p style="text-align:left; color: black">Email: {{user.email}}</p>
-      <p style="text-align:left; color: black">Bio: {{user.bio}}</p>
+        <div class = "starter-template">
+            <h1 style="color: White">Team Formation</h1>
+        </div>
     </div>
-  {% endfor %}
+
+    <div>
+      <!--<h4 style="color: White">To create a team, enter a team name in the box below and then click the "Create Team" button</h4>-->
+      <form style="color: White; margin-right: 500px; margin-left: 500px;" method="POST">
+        {{ wtf.form_field(formCT.teamid) }}
+        <button style="padding:10px; color: #800000;" type="submit" value="create" name="btn">Create Team</button>
+      </form>
+    </div>
+    <br>
+    
+    <br>
+    <div>
+      <h4 style="color: White">To post your profile on the "Looking for team page" click the "Post Profile" button below</h4>
+      <button style="padding:10px;" value="postOnLft" name="btn">Post Profile</button>
+    </div>
 {% endblock %}

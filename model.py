@@ -5,7 +5,7 @@ class Users(UserMixin, db.Model):
     name = db.Column(db.String(30))
     email = db.Column(db.String(40),unique=True)
     password = db.Column(db.String(80))
-    teamid = db.Column(db.String(20))
+    teamid = db.Column(Integer())
     bio = db.Column(db.String(200))
     lft = db.Column(db.Boolean(False))
     swimming = db.Column(db.Float(3, 2))

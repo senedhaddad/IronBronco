@@ -39,10 +39,17 @@ Dashboard
         <div>
           <h1 class="page-header" style="text-align:center; color: White">Welcome, {{player.name}}</h1>
           <!-- Show Progress -->
-          <h4 style="color:White;">Total Progress {{player.teamid}}</h4>
+          {% if team %}
+          <h4 style="color:White;">Total Progress of Team {{team.team}}</h4>
+          <h5 style="color:White;">Swimming: {{"%.1f"|format(team.swimming)}} miles</h5>       
+          <h5 style="color:White;">Cycling: {{"%.1f"|format(team.cycling)}} miles</h5>
+          <h5 style="color:White;">Running: {{"%.1f"|format(team.running)}} miles</h5>
+          {% endif %}
+          <h4 style="color:White;">Total Progress of {{player.name}}</h4>
           <h5 style="color:White;">Swimming: {{"%.1f"|format(player.swimming)}} miles</h5>       
           <h5 style="color:White;">Cycling: {{"%.1f"|format(player.cycling)}} miles</h5>
           <h5 style="color:White;">Running: {{"%.1f"|format(player.running)}} miles</h5>
+
           <!-- Update Progress -->
           <div class="Progress_Status">
             <div class="myprogressBar" ></div>
