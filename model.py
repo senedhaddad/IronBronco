@@ -7,6 +7,7 @@ class Users(UserMixin, db.Model):
     password = db.Column(db.String(80))
     teamid = db.Column(db.String(20))
     bio = db.Column(db.String(200))
+    lft = db.Column(db.Boolean(False))
     swimming = db.Column(db.Float(3, 2))
     cycling = db.Column(db.Float(5, 2))
     running = db.Column(db.Float(4,2))
