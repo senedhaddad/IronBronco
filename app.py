@@ -12,7 +12,7 @@ import sqlite3
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/senedhaddad'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/peterferguson'
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
@@ -61,7 +61,7 @@ class CreateTeamForm(FlaskForm):
     teamid = StringField('Create Team', validators=[InputRequired(), Length(min=2, max=30)])
 
 class JoinTeamForm(FlaskForm):
-    teamid = StringField('Join Team', validators=[InputRequired(), Length(min=2, max=30)])
+    teamid = StringField('Join Team', validators=[InputRequired(), Length(min=1, max=30)])
 
 @app.route('/')
 def index():
@@ -105,7 +105,8 @@ def signup():
                             running = 0.0)
             db.session.add(new_user)
             db.session.commit()
-            return redirect(url_for('index'))
+            login_user(new_user)
+            return redirect(url_for('dashboard'))
     except Exception as e:
         return redirect(url_for('badEmail'))
 
@@ -186,7 +187,8 @@ def teamFormation():
             db.session.commit()
             print(new_team.id)
             player.teamid=new_team.id
-            print(player.id,player.name)
+            print(player.teamid,player.name)
+            db.session.commit()
             return redirect(url_for('dashboard'))
     except Exception as e:
         return redirect(url_for('badTeamName'))
@@ -202,7 +204,9 @@ def joinTeam():
 
     # Currently takes teamid as input to join team
     if formJT.validate_on_submit():
-        currentTeam = db.session.query(Team).get(formJT.teamid.data)
+        findTeam = db.session.query(Team).filter(Team.team.like(formJT.teamid.data))
+        for row in findTeam:
+            currentTeam = db.session.query(Team).get(row.id)
         if currentTeam:
             try:
                 if currentTeam.player2 == "null":

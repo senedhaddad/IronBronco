@@ -42,6 +42,7 @@ Dashboard
         <h1 class="page-header">Welcome, {{player.name}}</h1>  
         <!-- Show Progress -->
         {% if team %}
+        <h3 style="color:White;">Team {{team.team}}</h1>  
         <h4 style="color:White;">Total Progress of Team {{team.team}}</h4>
         <h5 style="color:White;">Swimming: {{"%.1f"|format(team.swimming)}} miles</h5>       
         <h5 style="color:White;">Cycling: {{"%.1f"|format(team.cycling)}} miles</h5>
@@ -72,7 +73,8 @@ Dashboard
                 <input class="form-control" min="0.0" max="26.2" step="0.1" type="number" placeholder="Input Miles Run (miles)" id="running" name="running">
               </div>
               <br>
-              <button type="submit" class="btn btn-lg btn-primary btn-block" style="float:right; background-color: #800000">Update Distances</button>
+              <!-- <button type="submit" class="btn btn-lg btn-primary btn-block" style="float:right; background-color: #800000">Update Distances</button> -->
+              <button style="padding:10px; color: white; background-color: #800000;" type="submit" value="create" name="btn">Update Distances</button>
             </form>
             <br>
             <br>

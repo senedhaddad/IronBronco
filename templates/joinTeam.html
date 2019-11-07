@@ -8,7 +8,7 @@ Join Team
 {% block styles %}
 {{super()}}
 <link rel="icon" href="{{ url_for('.static', filename='favicon.ico')}}" type="image/x-icon">
-<link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
+<link rel="stylesheet" href="{{url_for('.static', filename='starter-template.css')}}">
 {% endblock %}
 
 {% block content %}
@@ -21,6 +21,8 @@ Join Team
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
 
 
           </button>
@@ -28,11 +30,13 @@ Join Team
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
             <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
             <li><a href="{{ url_for('teamFormation') }}">Team Formation</a></li>
             <li><a href="{{ url_for('joinTeam') }}">Join Team</a></li>
             <li><a href="{{ url_for('lookingForTeam') }}">Looking for Team</a></li>
-            <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
           </ul>
         </div>
       </div>
@@ -46,10 +50,12 @@ Join Team
         </div>
     </div>
 
-    <div>
-      <form style="color: White; margin-right: 500px; margin-left: 500px;" method="POST">
-        {{ wtf.form_field(formJT.teamid) }}
-        <button style="padding:10px; color: #800000;" type="submit" value="create" name="btn">Join Team</button>
+    <div class="Progress_Status" style="width: 20%;">
+        <div class="myprogressBar" ></div>
+       <form style="color: White;" method="POST">
+          {{ formJT.hidden_tag() }}
+          {{ wtf.form_field(formJT.teamid) }}
+        <button style="padding:10px; background-color: #800000;" type="submit" value="create" name="btn">Join Team</button>
       </form>
     </div>
     <br>
