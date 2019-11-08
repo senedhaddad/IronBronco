@@ -7,6 +7,7 @@ from flask_sqlalchemy  import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from decimal import Decimal
+import os
 import sqlite3
 
 app = Flask(__name__)
@@ -207,8 +208,8 @@ def joinTeam():
         findTeam = db.session.query(Team).filter(Team.team.like(formJT.teamid.data))
         for row in findTeam:
             currentTeam = db.session.query(Team).get(row.id)
-        if currentTeam:
-            try:
+        try:
+            if currentTeam:
                 if currentTeam.player2 == "null":
                     currentTeam.player2 = player.name
                     player.teamid = currentTeam.id
@@ -224,26 +225,36 @@ def joinTeam():
                     db.session.commit()
                     return redirect(url_for('dashboard'))
                 else:
-                    return("Sorry, the team you are trying to join is full")
-            except Exception as e:
-                return(str(e))
-        else:
-            return("Sorry, the team you are trying to join does not exist")
+                    return redirect(url_for('teamFull'))
+        except Exception as e:
+            return redirect(url_for('teamNo'))
 
     return render_template('joinTeam.html',formJT=formJT)
 
 @app.route('/lookingForTeam')
+@login_required
 def lookingForTeam():
     users = Users.query.all()
     return render_template('lookingForTeam.html',users=users)
 
 @app.route('/badTeamName')
+@login_required
 def badTeamName():
     return render_template('badTeamName.html')
 
 @app.route('/badEmail')
 def badEmail():
     return render_template('badEmail.html')
+
+@app.route('/teamFull')
+@login_required
+def teamFull():
+    return render_template('teamFull.html')
+
+@app.route('/teamNo')
+@login_required
+def teamNo():
+    return render_template('teamNo.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
