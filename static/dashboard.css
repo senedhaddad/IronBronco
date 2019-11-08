@@ -95,7 +95,8 @@ body {
   -webkit-appearance: none;  /* Override default CSS styles */
   appearance: none;
   width: 100%; /* Full-width */
-  height: 25px; /* Specified height */
+  height: 15px; /* Specified height */
+  border-radius: 5px;
   background: #d3d3d3; /* Grey background */
   outline: none; /* Remove outline */
   opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
@@ -115,6 +116,10 @@ body {
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
   background: #800000; /* Green background */
+  border-radius: 50%;
+  border-color: white;
+  border-style: solid;
+  border-width: 2px;
   cursor: pointer; /* Cursor on hover */
 }
 
@@ -122,5 +127,9 @@ body {
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
   background: #800000; /* Green background */
+  border-radius: 50%;
+  border-color: white;
+  border-style: solid;
+  border-width: 2px;
   cursor: pointer; /* Cursor on hover */
 }
