@@ -131,24 +131,35 @@ def dashboard():
         if not running:
             running=0.0
         try:
-            player.cycling+=Decimal(cycling)
+            cycling = Decimal(cycling)
+            running = Decimal(running)
+            swimming = Decimal(swimming)
+
+            if cycling < 0.0:
+                cycling = 0.0
+            if running < 0.0:
+                running = 0.0
+            if cycling < 0.0:
+                running = 0.0
+
+            player.cycling += cycling
             if player.cycling >= 112:
                 player.cycling = 112
-            player.running+=Decimal(running)
+            player.running += running
             if player.running >= 26.2:
                 player.running = 26.2
-            player.swimming+=Decimal(swimming)
+            player.swimming += swimming 
             if player.swimming >= 2.4:
                 player.swimming = 2.4
             
             if player.teamid > 0:
-                team.cycling+=Decimal(cycling)
+                team.cycling += cycling
                 if team.cycling >= 112:
                     team.cycling = 112
-                team.running+=Decimal(running)
+                team.running += running
                 if team.running >= 26.2:
                     team.running = 26.2
-                team.swimming+=Decimal(swimming)
+                team.swimming += swimming
                 if team.swimming >= 2.4:
                     team.swimming = 2.4
 

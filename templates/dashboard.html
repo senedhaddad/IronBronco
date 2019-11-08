@@ -60,25 +60,61 @@ Dashboard
             <form method="POST">
               <div class="form-row">
                 <label for="swimming" style="color: White">Swimming</label>
-                <input class="form-control" min="0.0" max="2.4" step="0.1" type="number" placeholder="Input Miles Swam (miles)" id="swimming" name="swimming">
+                <div class="slidecontainer">
+                    <input type="range" min="0.0" max="2.4" step="0.1" value="0" class="slider" id="swimming" name="swimming">
+                    <p style="color: White">Value: <span id="demo"></span></p>
+                </div>
+                <script>
+                    var slider = document.getElementById("swimming");
+                    var output = document.getElementById("demo");
+                    output.innerHTML = slider.value;
+
+                    slider.oninput = function() {
+                      output.innerHTML = this.value;
+                    }
+                </script>
               </div>
               <br>
               <div class="form-row">
                 <label for="cycling" style="color: White">Cycling</label>
-                <input class="form-control" min="0.0" max="112.0" step="0.1" type="number" placeholder="Input Miles Cycled (miles)" id="cycling" name="cycling">
+                <div class="slidecontainer">
+                    <input type="range" min="0.0" max="112.0" step="0.1" value="0" class="slider" id="cycling" name="cycling">
+                    <p style="color: White">Value: <span id="demo2"></span></p>
+                </div>
+                <script>
+                    var slider2 = document.getElementById("cycling");
+                    var output2 = document.getElementById("demo2");
+                    output2.innerHTML = slider2.value;
+
+                    slider2.oninput = function() {
+                      output2.innerHTML = this.value;
+                    }
+                </script>
               </div>
               <br>
               <div class="form-row">
                 <label for="running" style="color: White">Running</label>
-                <input class="form-control" min="0.0" max="26.2" step="0.1" type="number" placeholder="Input Miles Run (miles)" id="running" name="running">
+                <div class="slidecontainer">
+                    <input type="range" min="0.0" max="26.2" step="0.1" value="0" class="slider" id="running" name="running">
+                    <p style="color: White">Value: <span id="demo3"></span></p>
+                </div>
+                <script>
+                    var slider3 = document.getElementById("running");
+                    var output3 = document.getElementById("demo3");
+                    output3.innerHTML = slider3.value;
+
+                    slider3.oninput = function() {
+                      output3.innerHTML = this.value;
+                    }
+                </script>
               </div>
               <br>
-              <!-- <button type="submit" class="btn btn-lg btn-primary btn-block" style="float:right; background-color: #800000">Update Distances</button> -->
               <button style="padding:10px; color: white; background-color: #800000;" type="submit" value="create" name="btn">Update Distances</button>
             </form>
             <br>
             <br>
             <br>
+           
             <!-- <h4 style="color: White">Distance Biked</h4>
             <div id='meter'><div id='progress'>0%</div></div>
             <br>

@@ -86,32 +86,41 @@ body {
   color: black;
 }
 
-/* ​.meter {
-  width: 50%;
-  background-color: #fff;
-  color: white;
-  margin-left: auto;
-  margin-right:auto;
+.slidecontainer {
+  width: 100%; /* Width of the outside container */
 }
 
-.progress {
-  width: 0%;
-  height: 35px;
-  background-color: #800000;
-  text-align: center;
-  line-height: center;
-  color: black;
-} */
-
-/* #meter {
-  width: 50%; 
-  background-color: #ddd; 
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 25px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
 }
-#progress {
-  width: 0%; 
-  height: 35px; 
-  background-color: #800000; 
-  text-align: center; 
-  line-height: 32px; 
-  color: white; 
-}​ */
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #800000; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #800000; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
