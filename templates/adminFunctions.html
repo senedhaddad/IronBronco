@@ -1,7 +1,7 @@
 {% extends "bootstrap/base.html" %}
 
 {% block title %}
-Looking for Team Page
+Admin Functions Page
 {% endblock %}
 
 {% block styles %}
@@ -43,12 +43,12 @@ Looking for Team Page
 
     <div class = "container">
       <div class = "starter-template">
-          <h1 style="color: White">Looking for Team</h1>
+          <h1 style="color: White">Administrator Functions</h1>
       </div>
   </div>
 
-  {% for user in users %}
-  {% if user.lft == true %}
+  <h4 style="color: white">List of teams</h4>
+  {% for team in teams %}
   <div class="Progress_Status">
       <div class="myprogressBar" ></div>
     <div style="
@@ -56,11 +56,9 @@ Looking for Team Page
         padding: 5px;
         margin: 5px;
         background-color: white;"> 
-        <p style="text-align:left; color: black">Name: {{user.name}}</p>
-      <p style="text-align:left; color: black">Email: {{user.email}}</p>
-      <p style="text-align:left; color: black">Bio: {{user.bio}}</p>
+        <p style="text-align:left; color: black">Team Name: {{team.team}}</p>
+        <p style="text-align:left; color: black">Team ID: {{team.id}}</p>
     </div>
   </div>
-  {% endif %}
   {% endfor %}
 {% endblock %}

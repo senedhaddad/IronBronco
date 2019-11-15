@@ -12,8 +12,8 @@ import sqlite3
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/peterferguson'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/peterferguson'
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
@@ -184,9 +184,26 @@ def teamFormation():
     id = session["user_id"]
     player = db.session.query(Users).get(id)
     formCT = CreateTeamForm()
+    teamList = Team.query.all()
     
     try:
         if formCT.validate_on_submit():
+            for team in teamList:
+                if team.team == formCT.teamid.data:
+                    return redirect(url_for('badTeamName'))
+                if team.id == player.teamid:
+                    old_team = team
+            if player.teamid != 0:
+                if old_team.player1 == player.name:
+                    old_team.player1 = old_team.player2
+                    old_team.player2 = old_team.player3
+                elif old_team.player2 == player.name:
+                    old_team.player2 = old_team.player3
+                old_team.player3 = "null"
+                if old_team.player1 == "null":
+                    db.session.delete(old_team)
+                db.session.commit()
+                    
             new_team = Team(team=formCT.teamid.data,
                     player1=player.name,
                     player2="null",
@@ -194,6 +211,9 @@ def teamFormation():
                     swimming=0.0,
                     cycling=0.0,
                     running=0.0)
+            player.swimming=0.0
+            player.cycling=0.0
+            player.running=0.0
             player.lft=False
             db.session.add(new_team)
             db.session.commit()
@@ -203,7 +223,8 @@ def teamFormation():
             db.session.commit()
             return redirect(url_for('dashboard'))
     except Exception as e:
-        return redirect(url_for('badTeamName'))
+        return redirect(url_for('genError'))
+
         
     return render_template('teamFormation.html',formCT=formCT)
 
@@ -213,32 +234,61 @@ def joinTeam():
     id = session["user_id"]
     player = db.session.query(Users).get(id)
     formJT = JoinTeamForm()
+    teamList = Team.query.all()
 
     # Currently takes teamid as input to join team
-    if formJT.validate_on_submit():
-        findTeam = db.session.query(Team).filter(Team.team.like(formJT.teamid.data))
-        for row in findTeam:
-            currentTeam = db.session.query(Team).get(row.id)
-        try:
-            if currentTeam:
-                if currentTeam.player2 == "null":
-                    currentTeam.player2 = player.name
-                    player.teamid = currentTeam.id
-                    print(currentTeam.id, player.name)
-                    player.lft=False
-                    db.session.commit()
-                    return redirect(url_for('dashboard'))
-                elif currentTeam.player3 == "null":
-                    currentTeam.player3 = player.name
-                    player.teamid = currentTeam.id
-                    print(currentTeam.id, player.name)
-                    player.lft=False
-                    db.session.commit()
-                    return redirect(url_for('dashboard'))
-                else:
-                    return redirect(url_for('teamFull'))
-        except Exception as e:
-            return redirect(url_for('teamNo'))
+    try: 
+        if formJT.validate_on_submit():
+            findTeam = db.session.query(Team).filter(Team.team.like(formJT.teamid.data))
+            for row in findTeam:
+                currentTeam = db.session.query(Team).get(row.id)
+            exists = 0
+            for team in teamList:
+                print(team.team)
+                if team.team == formJT.teamid.data:
+                    exists = 1
+                if team.id == player.teamid:
+                    old_team = team
+            if exists == 0:
+                return redirect(url_for('teamNo'))
+            try:
+                if currentTeam:
+                    if player.teamid != 0:
+                        if old_team.player1 == player.name:
+                            old_team.player1 = old_team.player2
+                            old_team.player2 = old_team.player3
+                        elif old_team.player2 == player.name:
+                            old_team.player2 = old_team.player3
+                        old_team.player3 = "null"
+                        if old_team.player1 == "null":
+                            db.session.delete(old_team)
+                        db.session.commit()
+                    if currentTeam.player2 == "null":
+                        currentTeam.player2 = player.name
+                        player.teamid = currentTeam.id
+                        print(currentTeam.id, player.name)
+                        player.lft=False
+                        player.swimming=0.0
+                        player.cycling=0.0
+                        player.running=0.0
+                        db.session.commit()
+                        return redirect(url_for('dashboard'))
+                    elif currentTeam.player3 == "null":
+                        currentTeam.player3 = player.name
+                        player.teamid = currentTeam.id
+                        print(currentTeam.id, player.name)
+                        player.lft=False
+                        player.swimming=0.0
+                        player.cycling=0.0
+                        player.running=0.0
+                        db.session.commit()
+                        return redirect(url_for('dashboard'))
+                    else:
+                        return redirect(url_for('teamFull'))
+            except Exception as e:
+                return redirect(url_for('genError'))
+    except Exception as e:
+        return redirect(url_for('genError'))
 
     return render_template('joinTeam.html',formJT=formJT)
 
@@ -266,6 +316,17 @@ def teamFull():
 @login_required
 def teamNo():
     return render_template('teamNo.html')
+
+@app.route('/adminFunctions')
+@login_required
+def adminFunctions():
+    teams = Team.query.all()
+    return render_template('adminFunctions.html',teams=teams)
+
+@app.route('/genError')
+@login_required
+def genError():
+    return render_template('genError.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
