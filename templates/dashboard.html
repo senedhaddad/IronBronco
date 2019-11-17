@@ -49,7 +49,14 @@ Dashboard
         <h1 class="page-header">Welcome, {{player.name}}</h1>  
         <!-- Show Progress -->
         {% if team %}
-        <h3 style="color:White;">Team {{team.team}}</h1>  
+        <h2 style="color:White;">Team {{team.team}}</h2>  
+        <h4 style="color:White;">Members: {{team.player1}}</h4> 
+          {% if team.player2 != "null" %}
+            <h4 style="color:White;">{{team.player2}}</h4>
+          {% endif %}
+          {% if team.player3 != "null" %}
+            <h4 style="color:White;">{{team.player3}}</h4>
+          {% endif %}
         <h4 style="color:White;">Total Progress of Team {{team.team}}</h4>
         <h5 style="color:White;">Swimming: {{"%.1f"|format(team.swimming)}} miles</h5>       
         <h5 style="color:White;">Cycling: {{"%.1f"|format(team.cycling)}} miles</h5>

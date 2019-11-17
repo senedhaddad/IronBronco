@@ -18,6 +18,16 @@ ul {
   position: sticky;
 }
 
+.navbar-default .navbar-nav > li.dropdown:hover > a, 
+.navbar-default .navbar-nav > li.dropdown:hover > a:hover,
+.navbar-default .navbar-nav > li.dropdown:hover > a:focus {
+    background-color: rgb(231, 231, 231);
+    color: rgb(51, 51, 51);
+}
+li.dropdown:hover > .dropdown-menu {
+    display: block;
+}
+
 /*
  * Global add-ons
  */
