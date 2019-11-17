@@ -1,0 +1,20 @@
+{% extends 'admin/master.html' %}
+
+{% block title %}
+Admin Page
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="icon" href="{{ url_for('.static', filename='favicon.ico')}}" type="image/x-icon">
+{% endblock %}
+
+{% block body %}
+    {% if current_user.admin %}
+    <h2>Welcome to the Admin Page</h1>
+    {% elif  current_user.is_anonymous%}
+    <h2>Please login into an admin account to continue</h2>
+    {% else %}
+    <h2>Please return to dashboard, you do not have access</h2>
+    {% endif %}
+{% endblock %}
