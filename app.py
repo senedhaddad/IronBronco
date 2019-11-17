@@ -57,7 +57,9 @@ class MyModelView(ModelView):
         if current_user.is_anonymous == True:
             return False
         return current_user.admin == True 
-
+    def inaccessible_callback(self, name, **kwargs):
+        # redirect to home page if user doesn't have access
+        return redirect(url_for('index'))
     can_delete = False
   
 class MyAdminIndexView(AdminIndexView):
