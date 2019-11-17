@@ -22,6 +22,8 @@ Dashboard
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="{{ url_for('index') }}">Iron Bronco Triathlon</a>
         </div>
@@ -30,9 +32,14 @@ Dashboard
             <li><a href="{{ url_for('index') }}">Home</a></li>
             <li><a href="{{ url_for('about') }}">About</a></li>
             <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-            <li><a href="{{ url_for('teamFormation') }}">Team Formation</a></li>
-            <li><a href="{{ url_for('joinTeam') }}">Join Team</a></li>
-            <li><a href="{{ url_for('lookingForTeam') }}">Looking for Team</a></li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Team Options <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="{{ url_for('teamFormation') }}">Team Formation</a></li>
+                <li><a href="{{ url_for('joinTeam') }}">Join Team</a></li>
+                <li><a href="{{ url_for('lookingForTeam') }}">Looking for Team</a></li>
+                <li><a href="{{ url_for('lookingForMembers') }}">Looking for Members</a></li>
+              </ul>
+            </li>
             <li><a href="{{ url_for('logout') }}">Logout</a></li>
           </ul>
         </div>
@@ -42,23 +49,14 @@ Dashboard
         <h1 class="page-header">Welcome, {{player.name}}</h1>  
         <!-- Show Progress -->
         {% if team %}
-        <h3 style="color:White;">Team {{team.team}}</h1>
-        <h4 style="color:White;">Members of Team {{team.team}}</h4>
-        <h5 style="color:White;">{{team.player1}}</h5>
-        {% if team.player2 != "null" %}  
-        <h5 style="color:White;">{{team.player2}}</h5>
-        {% endif %}
-        {% if team.player3 != "null" %}
-        <h5 style="color:White;">{{team.player3}}</h5>    
-        {% endif %}
-
-        <form style="color: White" method="POST">
-          {{ formCT.hidden_tag() }}
-          {{ wtf.form_field(formCT.teamid) }}
-          <button style="padding:10px; background-color: #800000;" type="submit" value="create" name="btn">Kick Player(s)</button>
-        </form>
-        <button style="padding:0px; color: white; background-color: #800000;" type="submit" value="create" name="btn">Manage Members</button>
-
+        <h2 style="color:White;">Team {{team.team}}</h2>  
+        <h4 style="color:White;">Members: {{team.player1}}</h4> 
+          {% if team.player2 != "null" %}
+            <h4 style="color:White;">{{team.player2}}</h4>
+          {% endif %}
+          {% if team.player3 != "null" %}
+            <h4 style="color:White;">{{team.player3}}</h4>
+          {% endif %}
         <h4 style="color:White;">Total Progress of Team {{team.team}}</h4>
         <h5 style="color:White;">Swimming: {{"%.1f"|format(team.swimming)}} miles</h5>       
         <h5 style="color:White;">Cycling: {{"%.1f"|format(team.cycling)}} miles</h5>
@@ -130,16 +128,6 @@ Dashboard
             <br>
             <br>
             <br>
-           
-            <!-- <h4 style="color: White">Distance Biked</h4>
-            <div id='meter'><div id='progress'>0%</div></div>
-            <br>
-            <p style="color: White">Completed Distance (miles)</p>
-            <input type="text" id="tb">
-            <br>
-            <p style="color: White">Input Distance:</p>
-            <input type="button" value="Add" onclick="increase()"/>
-            <input type="button" value="Minus" onclick="decrease()"/> -->
         </div>
         <br>
       </div>

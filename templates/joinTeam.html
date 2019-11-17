@@ -23,8 +23,7 @@ Join Team
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-
-
+            <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="{{ url_for('dashboard') }}">Iron Bronco Triathlon</a>
         </div>
@@ -33,9 +32,14 @@ Join Team
             <li><a href="{{ url_for('index') }}">Home</a></li>
             <li><a href="{{ url_for('about') }}">About</a></li>
             <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-            <li><a href="{{ url_for('teamFormation') }}">Team Formation</a></li>
-            <li><a href="{{ url_for('joinTeam') }}">Join Team</a></li>
-            <li><a href="{{ url_for('lookingForTeam') }}">Looking for Team</a></li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Team Options <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="{{ url_for('teamFormation') }}">Team Formation</a></li>
+                <li><a href="{{ url_for('joinTeam') }}">Join Team</a></li>
+                <li><a href="{{ url_for('lookingForTeam') }}">Looking for Team</a></li>
+                <li><a href="{{ url_for('lookingForMembers') }}">Looking for Members</a></li>
+              </ul>
+            </li>
             <li><a href="{{ url_for('logout') }}">Logout</a></li>
           </ul>
         </div>
