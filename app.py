@@ -14,8 +14,8 @@ import sqlite3
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/ironbronco'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/ironbronco'
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
@@ -43,7 +43,10 @@ class Users(UserMixin, db.Model):
 class Team(UserMixin, db.Model):
     id = db.Column(db.Integer,primary_key=True)
     team = db.Column(db.String(20), unique=True)
-    email = db.Column(db.String(40), unique=True)
+    email1 = db.Column(db.String(40), unique=True)
+    email2 = db.Column(db.String(40), unique=True)
+    email3 = db.Column(db.String(40), unique=True)
+    password = db.Column(db.String(40), unique=True)
     lftm = db.Column(db.Boolean(False))
     player1 = db.Column(db.String(30))
     player2 = db.Column(db.String(30))
@@ -82,13 +85,14 @@ class RegisterForm(FlaskForm):
     bio = StringField('Bio', validators=[InputRequired(), Length(min=1, max=200)])
     looking = BooleanField('Looking for Team')
 
-
 class CreateTeamForm(FlaskForm):
-    teamid = StringField('Create Team', validators=[InputRequired(), Length(min=2, max=30)])
+    teamid = StringField('Team Name', validators=[InputRequired(), Length(min=2, max=30)])
+    password = PasswordField('Password', validators=[InputRequired(), Length(min=2, max=30)])
     looking = BooleanField('Looking for Team Members')
 
 class JoinTeamForm(FlaskForm):
     teamid = StringField('Join Team', validators=[InputRequired(), Length(min=1, max=30)])
+    password = PasswordField('Password', validators=[InputRequired(), Length(min=2, max=30)])
 
 admin = Admin(app,index_view=AdminIndexView())
 admin.add_view(MyModelView(Users, db.session))
@@ -152,51 +156,75 @@ def dashboard():
     if player.teamid > 0:
         team = db.session.query(Team).get(player.teamid)     
     if request.method == 'POST':
-        cycling=request.form['cycling']
-        running=request.form['running']
-        swimming=request.form['swimming']
-        if not swimming:
-            swimming=0.0
-        if not cycling:
-            cycling=0.0
-        if not running:
-            running=0.0
-        try:
-            cycling = Decimal(cycling)
-            running = Decimal(running)
-            swimming = Decimal(swimming)
 
-            if cycling < 0.0:
-                cycling = 0.0
-            if running < 0.0:
-                running = 0.0
-            if cycling < 0.0:
-                running = 0.0
-
-            player.cycling += cycling
-            if player.cycling >= 112:
-                player.cycling = 112
-            player.running += running
-            if player.running >= 26.2:
-                player.running = 26.2
-            player.swimming += swimming 
-            if player.swimming >= 2.4:
-                player.swimming = 2.4
-            
-            if player.teamid > 0:
-                team.cycling += cycling
-                if team.cycling >= 112:
-                    team.cycling = 112
-                team.running += running
-                if team.running >= 26.2:
-                    team.running = 26.2
-                team.swimming += swimming
-                if team.swimming >= 2.4:
-                    team.swimming = 2.4
-
+        if request.form['btn'] == "kick":
+            select = request.form.get('kickMember')
+            if select == "1":
+                playerToKick = db.session.query(Users).filter_by(email = team.email1).first()
+                team.player1 = team.player2
+                team.email1 = team.email2
+                team.player2 = team.player3
+                team.email2 = team.email3
+                playerToKick.teamid = 0
+            elif select == "2":
+                playerToKick = db.session.query(Users).filter_by(email = team.email2).first()
+                team.player2 = team.player3
+                playerToKick.teamid = 0
+            elif select == "3":
+                playerToKick = db.session.query(Users).filter_by(email = team.email3).first()
+                playerToKick.teamid = 0
+            team.player3 = None
+            team.email3 = None
+            if team.player1 == None:
+                db.session.delete(team)
             db.session.commit()
-        except Exception as e:
-            return(str(e))
+
+        else:
+            cycling=request.form['cycling']
+            running=request.form['running']
+            swimming=request.form['swimming']
+            if not swimming:
+                swimming=0.0
+            if not cycling:
+                cycling=0.0
+            if not running:
+                running=0.0
+            try:
+                cycling = Decimal(cycling)
+                running = Decimal(running)
+                swimming = Decimal(swimming)
+
+                if cycling < 0.0:
+                    cycling = 0.0
+                if running < 0.0:
+                    running = 0.0
+                if cycling < 0.0:
+                    running = 0.0
+
+                player.cycling += cycling
+                if player.cycling >= 112:
+                    player.cycling = 112
+                player.running += running
+                if player.running >= 26.2:
+                    player.running = 26.2
+                player.swimming += swimming 
+                if player.swimming >= 2.4:
+                    player.swimming = 2.4
+                
+                if player.teamid > 0:
+                    team.cycling += cycling
+                    if team.cycling >= 112:
+                        team.cycling = 112
+                    team.running += running
+                    if team.running >= 26.2:
+                        team.running = 26.2
+                    team.swimming += swimming
+                    if team.swimming >= 2.4:
+                        team.swimming = 2.4
+
+                db.session.commit()
+            except Exception as e:
+                return(str(e))
 
     # return render_template('dashboard.html')
     if player.teamid > 0:
@@ -227,20 +255,27 @@ def teamFormation():
             if player.teamid != 0:
                 if old_team.player1 == player.name:
                     old_team.player1 = old_team.player2
+                    old_team.email1 = old_team.email2
                     old_team.player2 = old_team.player3
+                    old_team.email2 = old_team.email3
                 elif old_team.player2 == player.name:
                     old_team.player2 = old_team.player3
-                old_team.player3 = "null"
-                if old_team.player1 == "null":
+                    old_team.email2 = old_team.email3
+                old_team.player3 = None
+                old_team.email3 = None
+                if old_team.player1 == None:
                     db.session.delete(old_team)
                 db.session.commit()
                     
             new_team = Team(team=formCT.teamid.data,
                     lftm = formCT.looking.data,
-                    email = player.email,
+                    email1 = player.email,
+                    email2=None,
+                    email3=None,
+                    password= formCT.password.data,
                     player1=player.name,
-                    player2="null",
-                    player3="null",
+                    player2=None,
+                    player3=None,
                     swimming=0.0,
                     cycling=0.0,
                     running=0.0)
@@ -282,20 +317,30 @@ def joinTeam():
                     old_team = team
             if exists == 0:
                 return redirect(url_for('teamNo'))
+            if team.password != formJT.password.data:
+                return redirect(url_for('teamPassword'))
             try:
                 if currentTeam:
                     if player.teamid != 0:
                         if old_team.player1 == player.name:
                             old_team.player1 = old_team.player2
+                            old_team.email1 = old_team.email2
                             old_team.player2 = old_team.player3
+                            old_team.email2 = old_team.email3
+                            # test this
+                            #newLeader = db.session.query(Users).get(old_team.player1)
+                            #old_team.email1 = newLeader.email
                         elif old_team.player2 == player.name:
                             old_team.player2 = old_team.player3
-                        old_team.player3 = "null"
-                        if old_team.player1 == "null":
+                            old_team.email2 = old_team.email3
+                        old_team.player3 = None
+                        old_team.email3 = None
+                        if old_team.player1 == None:
                             db.session.delete(old_team)
                         db.session.commit()
-                    if currentTeam.player2 == "null":
+                    if currentTeam.player2 == None:
                         currentTeam.player2 = player.name
+                        currentTeam.email2 = player.email
                         player.teamid = currentTeam.id
                         print(currentTeam.id, player.name)
                         player.lft=False
@@ -304,8 +349,9 @@ def joinTeam():
                         player.running=0.0
                         db.session.commit()
                         return redirect(url_for('dashboard'))
-                    elif currentTeam.player3 == "null":
+                    elif currentTeam.player3 == None:
                         currentTeam.player3 = player.name
+                        currentTeam.email3 = player.email
                         player.teamid = currentTeam.id
                         print(currentTeam.id, player.name)
                         player.lft=False
@@ -354,6 +400,10 @@ def teamFull():
 def teamNo():
     return render_template('teamNo.html')
 
+@app.route('/teamPassword')
+@login_required
+def teamPassword():
+    return render_template('teamPassword.html')
 
 @app.route('/genError')
 @login_required

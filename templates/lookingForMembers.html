@@ -34,7 +34,7 @@ Looking for Members
               <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
               <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Team Options <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li><a href="{{ url_for('teamFormation') }}">Team Formation</a></li>
+                  <li><a href="{{ url_for('teamFormation') }}">Create Team</a></li>
                   <li><a href="{{ url_for('joinTeam') }}">Join Team</a></li>
                   <li><a href="{{ url_for('lookingForTeam') }}">Looking for Team</a></li>
                   <li><a href="{{ url_for('lookingForMembers') }}">Looking for Members</a></li>
@@ -48,7 +48,7 @@ Looking for Members
 
     <div class = "container">
       <div class = "starter-template">
-          <h1 style="color: White">Looking for Team</h1>
+          <h1 style="color: White">Teams That Are Looking for Members</h1>
       </div>
   </div>
 
@@ -62,7 +62,7 @@ Looking for Members
           margin: 5px;
           background-color: white;"> 
         <p style="text-align:left; color: black">Team Name: {{team.team}}</p>
-        <p style="text-align:left; color: black">Email: {{team.email}}</p>
+        <p style="text-align:left; color: black">Email: {{team.email1}}</p>
       </div>
     </div>
     {% endif %}

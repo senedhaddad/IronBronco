@@ -11,29 +11,41 @@ Bad email page
 {% endblock %}
 
 {% block content %}
-    <nav style="background-color:#800000" class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="{{ url_for('index') }}">Iron Bronco Triathlon</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav navbar-right">
+  <nav style="background-color:#800000" class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{{ url_for('index') }}">Iron Bronco Triathlon</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
             <li><a href="{{ url_for('index') }}">Home</a></li>
             <li><a href="{{ url_for('about') }}">About</a></li>
-            <li><a href="{{ url_for('login') }}">Login</a></li>
-            <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-    <br>
-    <h3 style="color: white;">Sorry, that email is already in use</h3>
+            <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Team Options<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="{{ url_for('teamFormation') }}">Create Team</a></li>
+                <li><a href="{{ url_for('joinTeam') }}">Join Team</a></li>
+                <li><a href="{{ url_for('lookingForTeam') }}">Looking for Team</a></li>
+                <li><a href="{{ url_for('lookingForMembers') }}">Looking for Members</a></li>
+              </ul>
+            </li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
+  <br>
+  <h3 style="color: white;">Sorry, that email is already in use</h3>
 
 {% endblock %}

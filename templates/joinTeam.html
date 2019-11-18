@@ -34,7 +34,7 @@ Join Team
             <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
             <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Team Options <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="{{ url_for('teamFormation') }}">Team Formation</a></li>
+                <li><a href="{{ url_for('teamFormation') }}">Create Team</a></li>
                 <li><a href="{{ url_for('joinTeam') }}">Join Team</a></li>
                 <li><a href="{{ url_for('lookingForTeam') }}">Looking for Team</a></li>
                 <li><a href="{{ url_for('lookingForMembers') }}">Looking for Members</a></li>
@@ -59,6 +59,7 @@ Join Team
        <form style="color: White;" method="POST">
           {{ formJT.hidden_tag() }}
           {{ wtf.form_field(formJT.teamid) }}
+          {{ wtf.form_field(formJT.password) }}
         <button style="padding:10px; background-color: #800000;" type="submit" value="create" name="btn">Join Team</button>
       </form>
     </div>
