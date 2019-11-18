@@ -9,13 +9,15 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from decimal import Decimal
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
-import os
+from datetime import date
 import sqlite3
+import time
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/ironbronco'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/ironbronco'
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
@@ -180,6 +182,18 @@ def dashboard():
             db.session.commit()
 
         else:
+            today = date.today()
+            ib_start_date = date(2019, 11, 18)
+            ib_end_date = date(2019, 12, 6)
+            flashflag = 0
+            days_left = today.day - ib_start_date.day
+
+            if(days_left < 0):
+                flashflag = 1
+                return render_template('notYet.html',days=abs(days_left), ibdate=ib_start_date)
+            if(today.day - ib_end_date > 0):
+                return render_template('tooLate.html', ibdate=ib_end_date)
+
             cycling=request.form['cycling']
             running=request.form['running']
             swimming=request.form['swimming']
@@ -242,6 +256,12 @@ def logout():
 def teamFormation():
     id = session["user_id"]
     player = db.session.query(Users).get(id)
+
+    today = date.today()
+    ib_end_date = date(2019, 12, 6)
+    if(today.day - ib_end_date > 0):
+        return render_template('tooLate.html', ibdate=ib_end_date)
+
     formCT = CreateTeamForm()
     teamList = Team.query.all()
     
@@ -404,6 +424,16 @@ def teamNo():
 @login_required
 def teamPassword():
     return render_template('teamPassword.html')
+
+@app.route('/notYet')
+@login_required
+def notYet():
+    return render_template('notYet.html')
+
+@app.route('/tooLate')
+@login_required
+def tooLate():
+    return render_template('tooLate.html')
 
 @app.route('/genError')
 @login_required
