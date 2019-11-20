@@ -16,8 +16,8 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/ironbronco'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/ironbronco'
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
@@ -184,9 +184,15 @@ def dashboard():
                 playerToKick = db.session.query(Users).filter_by(email = team.email2).first()
                 team.player2 = team.player3
                 playerToKick.teamid = 0
+                playerToKick.swimming = 0.0
+                playerToKick.cycling = 0.0
+                playerToKick.running = 0.0
             elif select == "3":
                 playerToKick = db.session.query(Users).filter_by(email = team.email3).first()
                 playerToKick.teamid = 0
+                playerToKick.swimming = 0.0
+                playerToKick.cycling = 0.0
+                playerToKick.running = 0.0
             team.player3 = None
             team.email3 = None
             if team.player1 == None:
