@@ -264,7 +264,6 @@ def dashboard():
             except Exception as e:
                 return(str(e))
 
-    # return render_template('dashboard.html')
     if player.teamid > 0:
         return render_template('dashboard.html',player=player,team=team)
     return render_template('dashboard.html',player=player)
@@ -481,4 +480,4 @@ def genError():
     return render_template('genError.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
