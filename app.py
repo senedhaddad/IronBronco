@@ -16,8 +16,8 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/ironbronco'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/ironbronco'
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
@@ -364,6 +364,17 @@ def joinTeam():
             try:
                 if currentTeam:
                     if player.teamid != 0:
+                        # Date Check
+                        today = date.today()
+                        ib_start_date = date(2019, 11, 18)
+                        if(today.year > ib_start_date.year):
+                            return render_template('tooLate.html', ibdate=ib_start_date)
+                        else:
+                            if(today.month > ib_start_date.month):
+                                return render_template('tooLate.html', ibdate=ib_start_date)
+                            elif(today.month == ib_start_date.month and today.day > ib_start_date.day):
+                                return render_template('tooLate.html', ibdate=ib_start_date)
+                        
                         if old_team.player1 == player.name:
                             old_team.player1 = old_team.player2
                             old_team.email1 = old_team.email2
