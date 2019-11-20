@@ -48,7 +48,7 @@ class Team(UserMixin, db.Model):
     email1 = db.Column(db.String(40), unique=True)
     email2 = db.Column(db.String(40), unique=True)
     email3 = db.Column(db.String(40), unique=True)
-    password = db.Column(db.String(40), unique=True)
+    password = db.Column(db.String(40))
     lftm = db.Column(db.Boolean(False))
     player1 = db.Column(db.String(30))
     player2 = db.Column(db.String(30))
@@ -308,13 +308,13 @@ def teamFormation():
                 if old_team.player1 == None:
                     db.session.delete(old_team)
                 db.session.commit()
-                    
+            hashed_password = generate_password_hash(formCT.password.data, method='sha256')
             new_team = Team(team=formCT.teamid.data,
                     lftm = formCT.looking.data,
                     email1 = player.email,
                     email2=None,
                     email3=None,
-                    password= formCT.password.data,
+                    password= hashed_password,
                     player1=player.name,
                     player2=None,
                     player3=None,
@@ -359,7 +359,7 @@ def joinTeam():
                     old_team = team
             if exists == 0:
                 return redirect(url_for('teamNo'))
-            if team.password != formJT.password.data:
+            if check_password_hash(currentTeam.password, formJT.password.data) == False:
                 return redirect(url_for('teamPassword'))
             try:
                 if currentTeam:
@@ -369,9 +369,6 @@ def joinTeam():
                             old_team.email1 = old_team.email2
                             old_team.player2 = old_team.player3
                             old_team.email2 = old_team.email3
-                            # test this
-                            #newLeader = db.session.query(Users).get(old_team.player1)
-                            #old_team.email1 = newLeader.email
                         elif old_team.player2 == player.name:
                             old_team.player2 = old_team.player3
                             old_team.email2 = old_team.email3
@@ -464,4 +461,4 @@ def genError():
     return render_template('genError.html')
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
