@@ -177,13 +177,22 @@ def dashboard():
                 team.player2 = team.player3
                 team.email2 = team.email3
                 playerToKick.teamid = 0
+                playerToKick.swimming = 0.0
+                playerToKick.cycling = 0.0
+                playerToKick.running = 0.0
             elif select == "2":
                 playerToKick = db.session.query(Users).filter_by(email = team.email2).first()
                 team.player2 = team.player3
                 playerToKick.teamid = 0
+                playerToKick.swimming = 0.0
+                playerToKick.cycling = 0.0
+                playerToKick.running = 0.0
             elif select == "3":
                 playerToKick = db.session.query(Users).filter_by(email = team.email3).first()
                 playerToKick.teamid = 0
+                playerToKick.swimming = 0.0
+                playerToKick.cycling = 0.0
+                playerToKick.running = 0.0
             team.player3 = None
             team.email3 = None
             if team.player1 == None:
@@ -364,6 +373,17 @@ def joinTeam():
             try:
                 if currentTeam:
                     if player.teamid != 0:
+                        # Date Check
+                        today = date.today()
+                        ib_start_date = date(2019, 11, 18)
+                        if(today.year > ib_start_date.year):
+                            return render_template('tooLate.html', ibdate=ib_start_date)
+                        else:
+                            if(today.month > ib_start_date.month):
+                                return render_template('tooLate.html', ibdate=ib_start_date)
+                            elif(today.month == ib_start_date.month and today.day > ib_start_date.day):
+                                return render_template('tooLate.html', ibdate=ib_start_date)
+                        
                         if old_team.player1 == player.name:
                             old_team.player1 = old_team.player2
                             old_team.email1 = old_team.email2
