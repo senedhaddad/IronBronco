@@ -16,8 +16,8 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/ironbronco'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////softwareEng/IronBronco/sqlite_example/other.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/ironbronco'
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
@@ -296,6 +296,7 @@ def teamFormation():
                     old_team.email2 = old_team.email3
                 old_team.player3 = None
                 old_team.email3 = None
+                old_team.lftm = True
                 if old_team.player1 == None:
                     db.session.delete(old_team)
                 db.session.commit()
@@ -368,6 +369,7 @@ def joinTeam():
                             old_team.email2 = old_team.email3
                         old_team.player3 = None
                         old_team.email3 = None
+                        old_team.lftm = True
                         if old_team.player1 == None:
                             db.session.delete(old_team)
                         db.session.commit()
@@ -385,6 +387,7 @@ def joinTeam():
                     elif currentTeam.player3 == None:
                         currentTeam.player3 = player.name
                         currentTeam.email3 = player.email
+                        currentTeam.lftm = False
                         player.teamid = currentTeam.id
                         print(currentTeam.id, player.name)
                         player.lft=False
@@ -454,4 +457,4 @@ def genError():
     return render_template('genError.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
