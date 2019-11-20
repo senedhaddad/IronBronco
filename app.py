@@ -66,6 +66,15 @@ class MyModelView(ModelView):
         # redirect to home page if user doesn't have access
         return redirect(url_for('index'))
     can_delete = False
+
+class MyModelView1(ModelView):
+    def is_accessible(self):
+        if current_user.is_anonymous == True:
+            return False
+        return current_user.admin == True 
+    def inaccessible_callback(self, name, **kwargs):
+        # redirect to home page if user doesn't have access
+        return redirect(url_for('index'))
   
 class MyAdminIndexView(AdminIndexView):
     @expose('/')
@@ -98,7 +107,7 @@ class JoinTeamForm(FlaskForm):
 
 admin = Admin(app,index_view=AdminIndexView())
 admin.add_view(MyModelView(Users, db.session))
-admin.add_view(MyModelView(Team, db.session))
+admin.add_view(MyModelView1(Team, db.session))
 
 @app.route('/')
 def index():
@@ -296,7 +305,6 @@ def teamFormation():
                     old_team.email2 = old_team.email3
                 old_team.player3 = None
                 old_team.email3 = None
-                old_team.lftm = True
                 if old_team.player1 == None:
                     db.session.delete(old_team)
                 db.session.commit()
@@ -369,7 +377,6 @@ def joinTeam():
                             old_team.email2 = old_team.email3
                         old_team.player3 = None
                         old_team.email3 = None
-                        old_team.lftm = True
                         if old_team.player1 == None:
                             db.session.delete(old_team)
                         db.session.commit()
