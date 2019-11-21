@@ -183,6 +183,7 @@ def dashboard():
             elif select == "2":
                 playerToKick = db.session.query(Users).filter_by(email = team.email2).first()
                 team.player2 = team.player3
+                team.email2 = team.email3
                 playerToKick.teamid = 0
                 playerToKick.swimming = 0.0
                 playerToKick.cycling = 0.0
