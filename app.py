@@ -48,7 +48,7 @@ class Team(UserMixin, db.Model):
     email1 = db.Column(db.String(40), unique=True)
     email2 = db.Column(db.String(40), unique=True)
     email3 = db.Column(db.String(40), unique=True)
-    password = db.Column(db.String(40))
+    password = db.Column(db.String(80))
     lftm = db.Column(db.Boolean(False))
     player1 = db.Column(db.String(30))
     player2 = db.Column(db.String(30))
