@@ -29,6 +29,15 @@ login_manager.login_view = 'login'
 def load_user(user_id):
     return Users.query.get(user_id)
 
+# Parameters:
+#   UserMixin - Flask class that helps with user IDs issues
+#   db.Model - part of the database model
+# Purpose:
+#   Creates the "Users" table with the relevant constraints to each attribute
+# Return:
+#   The "Users" table is created in the database
+# Description: 
+#   Creates the "Users" table with the attributes and their restrictions each instance of a User needs
 class Users(UserMixin, db.Model):
     name = db.Column(db.String(30))
     email = db.Column(db.String(40), unique=True)
@@ -42,6 +51,16 @@ class Users(UserMixin, db.Model):
     running = db.Column(db.Float(4,2))
     id = db.Column(db.Integer(), primary_key=True)
 
+
+# Parameters:
+#   UserMixin - Flask class that helps with user IDs issues
+#   db.Model - part of the database model
+# Purpose:
+#   Creates the "Team" table with the relevant constraints to each attribute
+# Return:
+#   The "Team" table is created in the database
+# Description: 
+#   Creates the "Team" table with the attributes and their restrictions each instance of a Team needs
 class Team(UserMixin, db.Model):
     id = db.Column(db.Integer,primary_key=True)
     team = db.Column(db.String(20), unique=True)
@@ -84,11 +103,29 @@ class MyAdminIndexView(AdminIndexView):
         else:
             return redirect(url_for('dashboard'))
 
+
+# Parameters:
+#   FlaskForm - Flask session secure form with csrf protection
+# Purpose:
+#   Users will need to fill this form out if they're not logged in to access other parts of the website.
+# Return:
+#   N/A
+# Description: 
+#   A form to allow users to login and protecting that login information and enforcing restrictions on the attributes
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=40)])
     password = PasswordField('Password', validators=[InputRequired(), Length(min=8, max=80)])
     remember = BooleanField('Remember me')
 
+
+# Parameters:
+#   FlaskForm - Flask session secure form with csrf protection
+# Purpose:
+#   Users will need to fill this form out if they want to create an account/sign-up
+# Return:
+#   N/A
+# Description: 
+#   A form to allow users to registering/signing-up and protecting that sign-up information and enforcing restrictions on the attributes
 class RegisterForm(FlaskForm):
     name = StringField('Name', validators=[InputRequired(), Length(min=2, max=30)])
     email = StringField('Email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=40)])
@@ -96,27 +133,63 @@ class RegisterForm(FlaskForm):
     bio = StringField('Bio', validators=[InputRequired(), Length(min=1, max=200)])
     looking = BooleanField('Looking for Team')
 
+
+# Parameters:
+#   FlaskForm - Flask session secure form with csrf protection
+# Purpose:
+#   Users will need to fill this form out if they want to create a team
+# Return:
+#   N/A
+# Description: 
+#   A form to allow users to create a team and protecting that information and enforcing restrictions on the attributes
 class CreateTeamForm(FlaskForm):
     teamid = StringField('Team Name', validators=[InputRequired(), Length(min=2, max=30)])
     password = PasswordField('Password', validators=[InputRequired(), Length(min=2, max=30)])
     looking = BooleanField('Looking for Team Members')
 
+
+# Parameters:
+#   FlaskForm - Flask session secure form with csrf protection
+# Purpose:
+#   Users will need to fill this form out if they want to join a team
+# Return:
+#   N/A
+# Description: 
+#   A form to allow users to join a team and protecting that information and enforcing restrictions on the attributes
+
 class JoinTeamForm(FlaskForm):
     teamid = StringField('Join Team', validators=[InputRequired(), Length(min=1, max=30)])
     password = PasswordField('Password', validators=[InputRequired(), Length(min=2, max=30)])
+
+
+# COMMENT THIS SECTION
 
 admin = Admin(app,index_view=AdminIndexView())
 admin.add_view(MyModelView(Users, db.session))
 admin.add_view(MyModelView1(Team, db.session))
 
+
+# Description: 
+#   Returns the "Home" page.
 @app.route('/')
 def index():
     return render_template('index.html')
     
+# Description: 
+#   Returns the "About" page.
 @app.route('/about')
 def about():
     return render_template('about.html')
-    
+
+# Parameters:
+#   GET method to receive data
+#   POST methods to send data
+# Purpose:
+#   Calls the login form for user to login
+# Return:
+#   Returns the dashboard for successful login or the "invalid email or password" page
+# Description:
+#   Allows a user to login if user account is already in database
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -133,6 +206,16 @@ def login():
 
     return render_template('login.html', form=form)
 
+
+# Parameters:
+#   GET method to receive data
+#   POST methods to send data
+# Purpose:
+#   User can create an account
+# Return:
+#   Returns the dashboard for successful signup or the "Bad email" page. Returns restriction errors on page if occur.
+# Description:
+#   Stores new user account information in the database and also stores hashed password (not plaintext)
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = RegisterForm()
@@ -159,6 +242,16 @@ def signup():
 
     return render_template('signup.html', form=form)
 
+
+# Parameters:
+#   GET method to receive data
+#   POST methods to send data
+# Purpose:
+#   User can see their progress, update their progress, or kick a member
+# Return:
+#   Returns the updated dashboard or a "Too late" or "Not yet" page because of the date restrictions.
+# Description:
+#   Central see progress, update progress, or kick a member
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
@@ -269,12 +362,31 @@ def dashboard():
         return render_template('dashboard.html',player=player,team=team)
     return render_template('dashboard.html',player=player)
 
+
+# Parameters:
+#   N/A
+# Purpose:
+#   Logout of account.
+# Return:
+#   Returns home page.
+# Description:
+#   Logs user out of their account.
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
+
+# Parameters:
+#   GET method to receive data
+#   POST methods to send data
+# Purpose:
+#   Users can create a team.
+# Return:
+#   Returns the updated dashboard or a "Too late" or "Not yet" page because of the date restrictions.
+# Description:
+#   Creates a team with a unique name and password for that team.
 @app.route('/teamFormation', methods=['GET','POST'])
 @login_required
 def teamFormation():
@@ -347,6 +459,16 @@ def teamFormation():
         
     return render_template('teamFormation.html',formCT=formCT)
 
+
+# Parameters:
+#   GET method to receive data
+#   POST methods to send data
+# Purpose:
+#   Users can join a team.
+# Return:
+#   Returns the updated dashboard or a "No team," "Wrong team password," "Team Full," or other error-handling.
+# Description:
+#   Users join a team by adding a valid team name and password.
 @app.route('/joinTeam', methods=['GET','POST'])
 @login_required
 def joinTeam():
@@ -418,52 +540,72 @@ def joinTeam():
 
     return render_template('joinTeam.html',formJT=formJT)
 
+# Description: 
+#   Returns a page with all users that are looking for a team.
 @app.route('/lookingForTeam')
 @login_required
 def lookingForTeam():
     users = Users.query.all()
     return render_template('lookingForTeam.html',users=users)
 
+# Description: 
+#   Returns a page with all teams that are looking for members.
 @app.route('/lookingForMembers')
 @login_required
 def lookingForMembers():
     teams = Team.query.all()
     return render_template('lookingForMembers.html',teams=teams)
 
+# Description: 
+#   Error-handling page for an invalid team name.
 @app.route('/badTeamName')
 @login_required
 def badTeamName():
     return render_template('badTeamName.html')
 
+# Description: 
+#   Error-handling page for an invalid email.
 @app.route('/badEmail')
 def badEmail():
     return render_template('badEmail.html')
 
+# Description: 
+#   Error-handling page for a full team.
 @app.route('/teamFull')
 @login_required
 def teamFull():
     return render_template('teamFull.html')
 
+# Description: 
+#   Error-handling page for a team that does not exist.
 @app.route('/teamNo')
 @login_required
 def teamNo():
     return render_template('teamNo.html')
 
+# Description: 
+#   Error-handling page for an invalid team password.
 @app.route('/teamPassword')
 @login_required
 def teamPassword():
     return render_template('teamPassword.html')
 
+# Description: 
+#   Error-handling page for date restriction indicating the event has not started.
 @app.route('/notYet')
 @login_required
 def notYet():
     return render_template('notYet.html')
 
+# Description: 
+#   Error-handling page for date restriction indicating the event has ended.
 @app.route('/tooLate')
 @login_required
 def tooLate():
     return render_template('tooLate.html')
 
+# Description: 
+#   General error-handling page.
 @app.route('/genError')
 @login_required
 def genError():
