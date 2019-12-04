@@ -202,21 +202,21 @@ def dashboard():
 
         else:
             # Date Check
-            today = date.today()
-            ib_start_date = date(2019, 11, 18)
-            ib_end_date = date(2019, 12, 6)
-            days_left = today.day - ib_start_date.day
+            # today = date.today()
+            # ib_start_date = date(2019, 11, 18)
+            # ib_end_date = date(2019, 12, 6)
+            # days_left = today.day - ib_start_date.day
 
-            if(days_left < 0):
-                flashflag = 1
-                return render_template('notYet.html',days=abs(days_left), ibdate=ib_start_date)
-            if(today.year > ib_end_date.year):
-                return render_template('tooLate.html', ibdate=ib_end_date)
-            else:
-                if(today.month > ib_end_date.month):
-                    return render_template('tooLate.html', ibdate=ib_end_date)
-                elif(today.month == ib_end_date.month and today.day > ib_end_date.day):
-                    return render_template('tooLate.html', ibdate=ib_end_date)
+            # if(days_left < 0):
+            #    flashflag = 1
+            #    return render_template('notYet.html',days=abs(days_left), ibdate=ib_start_date)
+            # if(today.year > ib_end_date.year):
+            #    return render_template('tooLate.html', ibdate=ib_end_date)
+            # else:
+            #    if(today.month > ib_end_date.month):
+            #        return render_template('tooLate.html', ibdate=ib_end_date)
+            #    elif(today.month == ib_end_date.month and today.day > ib_end_date.day):
+            #        return render_template('tooLate.html', ibdate=ib_end_date)
             # End of Date Check
 
             cycling=request.form['cycling']
@@ -282,15 +282,15 @@ def teamFormation():
     player = db.session.query(Users).get(id)
 
     # Date Check
-    today = date.today()
-    ib_end_date = date(2019, 12, 6)
-    if(today.year > ib_end_date.year):
-        return render_template('tooLate.html', ibdate=ib_end_date)
-    else:
-        if(today.month > ib_end_date.month):
-            return render_template('tooLate.html', ibdate=ib_end_date)
-        elif(today.month == ib_end_date.month and today.day > ib_end_date.day):
-            return render_template('tooLate.html', ibdate=ib_end_date)
+    # today = date.today()
+    # ib_end_date = date(2019, 12, 6)
+    # if(today.year > ib_end_date.year):
+    #    return render_template('tooLate.html', ibdate=ib_end_date)
+    # else:
+    #    if(today.month > ib_end_date.month):
+    #        return render_template('tooLate.html', ibdate=ib_end_date)
+    #    elif(today.month == ib_end_date.month and today.day > ib_end_date.day):
+    #        return render_template('tooLate.html', ibdate=ib_end_date)
     # End of Date Check
 
     formCT = CreateTeamForm()
